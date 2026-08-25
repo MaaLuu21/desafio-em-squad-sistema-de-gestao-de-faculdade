@@ -1,4 +1,4 @@
-﻿namespace SistemaFaculdade.Enums;
+﻿namespace SistemaGestaoDeFaculdade.Enums;
 
 public enum TipoCurso
 {

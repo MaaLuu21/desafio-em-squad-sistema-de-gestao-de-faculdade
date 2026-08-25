@@ -1,4 +1,4 @@
-﻿namespace SistemaFaculdade;
+﻿namespace SistemaGestaoDeFaculdade;
 
 class Program
 {
