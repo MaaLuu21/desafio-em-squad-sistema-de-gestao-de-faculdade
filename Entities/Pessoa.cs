@@ -1,4 +1,5 @@
 ﻿namespace SistemaGestaoDeFaculdade.Entities
+
 {
     public abstract class Pessoa
     {

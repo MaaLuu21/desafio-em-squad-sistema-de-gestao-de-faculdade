@@ -1,4 +1,5 @@
-﻿namespace SistemaFaculdade;
+﻿using SistemaGestaoDeFaculdade.Entities;
+namespace SistemaFaculdade;
 
 class Program
 {
