@@ -1,13 +1,16 @@
 ﻿namespace SistemaGestaoDeFaculdade;
 
+using SistemaGestaoDeFaculdade.Entities;
+using SistemaGestaoDeFaculdade.Enums;
+
 class Program
 {
     // "Banco de Dados" em memória 
-    public static List<Curso> Cursos = new();
-    public static List<Professor> Professores = new();
-    public static List<Aluno> Alunos = new();
-    public static List<Disciplina> Disciplinas = new();
-    public static List<Matricula> Matriculas = new();
+    public static List<Curso> cursos = new();
+    public static List<Professor> professores = new();
+    public static List<Aluno> alunos = new();
+    public static List<Disciplina> disciplinas = new();
+    public static List<Matricula> matriculas = new();
 
     static void Main(string[] args)
     {
@@ -80,14 +83,112 @@ class Program
             }
         }
     }
+    private static void CadastrarCurso()
+    {
+        try
+        {
+            Console.Write("Código do curso: ");
+            string codigo_curso = Console.ReadLine()!;
 
-    // Métodos vazios para cada integrante preencher no seu branch:
-    static void CadastrarCurso() { 
-        /* Dev 1 */ 
+            // Regra de negócio: código do curso não pode se repetir
+            bool codigoJaExiste = Cursos.Any(c =>
+                c.Codigo.Equals(codigo_curso.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (codigoJaExiste)
+            {
+                Console.WriteLine($"Erro: já existe um curso cadastrado com o código '{codigo_curso}'.");
+                Pausar();
+                return;
+            }
+
+            Console.Write("Nome do curso: ");
+            string nome_curso = Console.ReadLine()!;
+
+            Console.WriteLine("Tipo do curso:");
+            Console.WriteLine("1 - Graduação");
+            Console.WriteLine("2 - Pós-graduação");
+            Console.Write("Escolha: ");
+
+            string? opcaoTipoCurso = Console.ReadLine();
+
+            TipoCurso tipo_curso = opcaoTipoCurso switch
+            {
+                "1" => TipoCurso.Graduacao,
+                "2" => TipoCurso.PosGraduacao,
+                _ => throw new ArgumentException("Tipo de curso inválido. Escolha 1 ou 2.")
+            };
+
+            Curso curso = new Curso(codigo_curso, nome_curso, tipo_curso);
+            Cursos.Add(curso);
+
+            Console.WriteLine("\nCurso cadastrado com sucesso!");
+            Console.WriteLine(curso);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao cadastrar curso: {ex.Message}");
+        }
+        finally
+        {
+            Pausar();
+        }
     }
-    static void CadastrarProfessor() { 
-        /* Dev 1 */ 
+    
+    private static void CadastrarProfessor()
+    {
+        try
+        {
+            Console.Write("Nome: ");
+            string nome = Console.ReadLine()!;
+
+            Console.Write("CPF: ");
+            string cpf = Console.ReadLine()!;
+
+            // Regra de negócio: CPF não pode se repetir
+            bool cpfJaExiste = professores.Any(p =>
+                p.Cpf.Equals(cpf.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (cpfJaExiste)
+            {
+                Console.WriteLine($"Erro: já existe um professor cadastrado com o CPF '{cpf}'.");
+                return;
+            }
+
+            Console.Write("E-mail: ");
+            string email = Console.ReadLine()!;
+
+            Console.Write("Registro: ");
+            string registro = Console.ReadLine()!;
+
+            // Regra de negócio: registro não pode se repetir
+            bool registroJaExiste = professores.Any(p =>
+                p.Registro.Equals(registro.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (registroJaExiste)
+            {
+                Console.WriteLine($"Erro: já existe um professor cadastrado com o registro '{registro}'.");
+                return;
+            }
+
+            Console.Write("Especialidade: ");
+            string especialidade = Console.ReadLine()!;
+
+            Professor professor = new professor(nome, cpf, email, registro, especialidade);
+            professores.Add(professor);
+
+            Console.WriteLine("\nProfessor cadastrado com sucesso!");
+            Console.WriteLine(professor);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao cadastrar professor: {ex.Message}");
+        }
+        finally
+        {
+            Pausar();
+        }
     }
+
     static void CadastrarAluno() { 
         /* Dev 2 */ 
     }
