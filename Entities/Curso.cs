@@ -3,9 +3,9 @@ namespace SistemaGestaoDeFaculdade.Entities;
 using SistemaGestaoDeFaculdade.Enums;
 
 /// <summary>
-/// Entidade Curso.
-/// Encapsulamento: as propriedades têm "set" privado — depois de
-/// criado, um curso não pode ser alterado por fora da classe.
+/// Entidade Curso
+/// Encapsulamento: as propriedades têm "set" privado porque depois de
+/// criado um curso não pode ser alterado por fora da classe.
 /// </summary>
 public class Curso
 {

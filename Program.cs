@@ -83,8 +83,6 @@ class Program
             }
         }
     }
-
-    // Métodos vazios para cada integrante preencher no seu branch:
     private static void CadastrarCurso()
     {
         try
@@ -135,10 +133,62 @@ class Program
             Pausar();
         }
     }
+    
+    private static void CadastrarProfessor()
+    {
+        try
+        {
+            Console.Write("Nome: ");
+            string nome = Console.ReadLine()!;
 
-    static void CadastrarProfessor() { 
-        /* Dev 1 */ 
+            Console.Write("CPF: ");
+            string cpf = Console.ReadLine()!;
+
+            // Regra de negócio: CPF não pode se repetir
+            bool cpfJaExiste = Professores.Any(p =>
+                p.Cpf.Equals(cpf.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (cpfJaExiste)
+            {
+                Console.WriteLine($"Erro: já existe um professor cadastrado com o CPF '{cpf}'.");
+                return;
+            }
+
+            Console.Write("E-mail: ");
+            string email = Console.ReadLine()!;
+
+            Console.Write("Registro: ");
+            string registro = Console.ReadLine()!;
+
+            // Regra de negócio: registro não pode se repetir
+            bool registroJaExiste = Professores.Any(p =>
+                p.Registro.Equals(registro.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (registroJaExiste)
+            {
+                Console.WriteLine($"Erro: já existe um professor cadastrado com o registro '{registro}'.");
+                return;
+            }
+
+            Console.Write("Especialidade: ");
+            string especialidade = Console.ReadLine()!;
+
+            Professor professor = new Professor(nome, cpf, email, registro, especialidade);
+            Professores.Add(professor);
+
+            Console.WriteLine("\nProfessor cadastrado com sucesso!");
+            Console.WriteLine(professor);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao cadastrar professor: {ex.Message}");
+        }
+        finally
+        {
+            Pausar();
+        }
     }
+
     static void CadastrarAluno() { 
         /* Dev 2 */ 
     }
