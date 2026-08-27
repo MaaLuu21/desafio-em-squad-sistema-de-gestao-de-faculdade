@@ -1,4 +1,5 @@
 ﻿namespace SistemaGestaoDeFaculdade.Entities
+
 {
     public abstract class Pessoa
     {
@@ -14,6 +15,7 @@
             Cpf = cpf;
             Email = email;
         }
+
         public void ReceberNotificacoes(string mensagem)
         {
             Notificacoes.Add(mensagem);

@@ -173,7 +173,7 @@ class Program
             Console.Write("Especialidade: ");
             string especialidade = Console.ReadLine()!;
 
-            Professor professor = new professor(nome, cpf, email, registro, especialidade);
+            Professor professor = new Professor(nome, cpf, email, registro, especialidade);
             professores.Add(professor);
 
             Console.WriteLine("\nProfessor cadastrado com sucesso!");
@@ -189,9 +189,34 @@ class Program
         }
     }
 
-    static void CadastrarAluno() { 
-        /* Dev 2 */ 
+     static void CadastrarAluno()
+    {
+        Console.Clear();
+        Console.WriteLine("***Cadastro de Aluno***");
+       
+        Console.Write("Nome aluno:");
+        string nomeDigitado = (Console.ReadLine() ?? "").Trim();
+       
+        Console.Write("CPF aluno:");
+        string cpfDigitado = (Console.ReadLine() ?? "").Trim().Replace("-", "").Replace(".", "");
+        bool cpfExiste = Aluno.CpfJaCadastrado(cpfDigitado, alunos);
+        if (cpfExiste)
+        {
+            Console.WriteLine("\n[ERRO]O aluno não pode ser repetido! CPF já cadastrado.");
+            return;
+        }
+
+        Console.Write("Email aluno:");
+        string emailDigitado = (Console.ReadLine() ?? "").Trim();
+
+        int numeroMatricula = alunos.Any() ? alunos.Max(a => a.NumeroMatricula) + 1 : 1;
+
+        alunos.Add(new Aluno(nomeDigitado, cpfDigitado, emailDigitado, numeroMatricula));
+
+        Console.WriteLine($"\nAluno {nomeDigitado} cadastrado com sucesso! Número de matrícula: {numeroMatricula}");
+        Pausar();
     }
+  
     static void CadastrarDisciplina() { 
         /* Dev 3 */ 
     }
