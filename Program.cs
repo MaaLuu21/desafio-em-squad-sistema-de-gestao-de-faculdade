@@ -173,7 +173,7 @@ class Program
             Console.Write("Especialidade: ");
             string especialidade = Console.ReadLine()!;
 
-            Professor professor = new professor(nome, cpf, email, registro, especialidade);
+            Professor professor = new Professor(nome, cpf, email, registro, especialidade);
             professores.Add(professor);
 
             Console.WriteLine("\nProfessor cadastrado com sucesso!");
