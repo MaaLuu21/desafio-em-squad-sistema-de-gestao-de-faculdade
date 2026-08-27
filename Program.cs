@@ -1,5 +1,8 @@
 ﻿namespace SistemaGestaoDeFaculdade;
 
+using SistemaGestaoDeFaculdade.Entities;
+using SistemaGestaoDeFaculdade.Enums;
+
 class Program
 {
     // "Banco de Dados" em memória 
@@ -82,9 +85,57 @@ class Program
     }
 
     // Métodos vazios para cada integrante preencher no seu branch:
-    static void CadastrarCurso() { 
-        /* Dev 1 */ 
+    private static void CadastrarCurso()
+    {
+        try
+        {
+            Console.Write("Código do curso: ");
+            string codigo_curso = Console.ReadLine()!;
+
+            // Regra de negócio: código do curso não pode se repetir
+            bool codigoJaExiste = Cursos.Any(c =>
+                c.Codigo.Equals(codigo_curso.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (codigoJaExiste)
+            {
+                Console.WriteLine($"Erro: já existe um curso cadastrado com o código '{codigo_curso}'.");
+                Pausar();
+                return;
+            }
+
+            Console.Write("Nome do curso: ");
+            string nome_curso = Console.ReadLine()!;
+
+            Console.WriteLine("Tipo do curso:");
+            Console.WriteLine("1 - Graduação");
+            Console.WriteLine("2 - Pós-graduação");
+            Console.Write("Escolha: ");
+
+            string? opcaoTipoCurso = Console.ReadLine();
+
+            TipoCurso tipo_curso = opcaoTipoCurso switch
+            {
+                "1" => TipoCurso.Graduacao,
+                "2" => TipoCurso.PosGraduacao,
+                _ => throw new ArgumentException("Tipo de curso inválido. Escolha 1 ou 2.")
+            };
+
+            Curso curso = new Curso(codigo_curso, nome_curso, tipo_curso);
+            Cursos.Add(curso);
+
+            Console.WriteLine("\nCurso cadastrado com sucesso!");
+            Console.WriteLine(curso);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao cadastrar curso: {ex.Message}");
+        }
+        finally
+        {
+            Pausar();
+        }
     }
+
     static void CadastrarProfessor() { 
         /* Dev 1 */ 
     }
