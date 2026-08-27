@@ -15,6 +15,7 @@
             Cpf = cpf;
             Email = email;
         }
+
         public void ReceberNotificacoes(string mensagem)
         {
             Notificacoes.Add(mensagem);

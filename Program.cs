@@ -1,12 +1,11 @@
-﻿using SistemaGestaoDeFaculdade.Entities;
-namespace SistemaFaculdade;
+﻿namespace SistemaGestaoDeFaculdade;
 
 class Program
 {
-    // "Banco de Dados" em memória 
+     //"Banco de Dados" em memória
     public static List<Curso> Cursos = new();
     public static List<Professor> Professores = new();
-    public static List<Aluno> Alunos = new();
+    public static List<Aluno> alunos = new();
     public static List<Disciplina> Disciplinas = new();
     public static List<Matricula> Matriculas = new();
 
@@ -86,11 +85,34 @@ class Program
     static void CadastrarCurso() { 
         /* Dev 1 */ 
     }
-    static void CadastrarProfessor() { 
-        /* Dev 1 */ 
+    static void CadastrarProfessor()
+    {
+        /* Dev 1 */
     }
-    static void CadastrarAluno() { 
-        /* Dev 2 */ 
+    static void CadastrarAluno()
+    {
+        Console.Clear();
+        Console.WriteLine("***Cadastro de Aluno***");
+        Console.WriteLine("CPF aluno:");
+        string cpfDigitado = (Console.ReadLine() ?? "").Trim().Replace("-", "").Replace(".", "");
+        bool cpfExiste = Aluno.CpfJaCadastrado(cpfDigitado, alunos);
+        if (cpfExiste)
+        {
+            Console.WriteLine("\n[ERRO]O aluno não pode ser repetido! CPF já cadastrado.");
+            return;
+        }
+        Console.WriteLine("Nome aluno:");
+        string nomeDigitado = (Console.ReadLine() ?? "").Trim();
+
+        Console.WriteLine("Email aluno:");
+        string emailDigitado = (Console.ReadLine() ?? "").Trim();
+
+        int numeroMatricula = alunos.Any() ? alunos.Max(a => a.NumeroMatricula) + 1 : 1;
+
+        alunos.Add(new Aluno(nomeDigitado, cpfDigitado, emailDigitado, numeroMatricula));
+
+        Console.WriteLine($"\nAluno {nomeDigitado} cadastrado com sucesso! Número de matrícula: {numeroMatricula}");
+        Pausar();
     }
     static void CadastrarDisciplina() { 
         /* Dev 3 */ 
