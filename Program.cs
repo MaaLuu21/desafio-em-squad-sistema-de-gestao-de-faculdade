@@ -6,11 +6,11 @@ using SistemaGestaoDeFaculdade.Enums;
 class Program
 {
     // "Banco de Dados" em memória 
-    public static List<Curso> Cursos = new();
-    public static List<Professor> Professores = new();
-    public static List<Aluno> Alunos = new();
-    public static List<Disciplina> Disciplinas = new();
-    public static List<Matricula> Matriculas = new();
+    public static List<Curso> cursos = new();
+    public static List<Professor> professores = new();
+    public static List<Aluno> alunos = new();
+    public static List<Disciplina> disciplinas = new();
+    public static List<Matricula> matriculas = new();
 
     static void Main(string[] args)
     {
@@ -145,7 +145,7 @@ class Program
             string cpf = Console.ReadLine()!;
 
             // Regra de negócio: CPF não pode se repetir
-            bool cpfJaExiste = Professores.Any(p =>
+            bool cpfJaExiste = professores.Any(p =>
                 p.Cpf.Equals(cpf.Trim(), StringComparison.OrdinalIgnoreCase));
 
             if (cpfJaExiste)
@@ -161,7 +161,7 @@ class Program
             string registro = Console.ReadLine()!;
 
             // Regra de negócio: registro não pode se repetir
-            bool registroJaExiste = Professores.Any(p =>
+            bool registroJaExiste = professores.Any(p =>
                 p.Registro.Equals(registro.Trim(), StringComparison.OrdinalIgnoreCase));
 
             if (registroJaExiste)
@@ -173,8 +173,8 @@ class Program
             Console.Write("Especialidade: ");
             string especialidade = Console.ReadLine()!;
 
-            Professor professor = new Professor(nome, cpf, email, registro, especialidade);
-            Professores.Add(professor);
+            Professor professor = new professor(nome, cpf, email, registro, especialidade);
+            professores.Add(professor);
 
             Console.WriteLine("\nProfessor cadastrado com sucesso!");
             Console.WriteLine(professor);
