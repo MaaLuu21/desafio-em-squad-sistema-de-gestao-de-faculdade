@@ -13,17 +13,17 @@ public class Curso
     public string Nome { get; private set; }
     public TipoCurso Tipo { get; private set; }
 
-    public Curso(string codigo, string nome, TipoCurso tipo)
+    public Curso(string codigo_curso, string nome_curso, TipoCurso tipo_curso)
     {
-        if (string.IsNullOrWhiteSpace(codigo))
+        if (string.IsNullOrWhiteSpace(codigo_curso))
             throw new ArgumentException("O código do curso não pode ser vazio.");
 
-        if (string.IsNullOrWhiteSpace(nome))
+        if (string.IsNullOrWhiteSpace(nome_curso))
             throw new ArgumentException("O nome do curso não pode ser vazio.");
 
-        Codigo = codigo.Trim().ToUpper();
-        Nome = nome.Trim();
-        Tipo = tipo;
+        Codigo = codigo_curso.Trim().ToUpper();
+        Nome = nome_curso.Trim();
+        Tipo = tipo_curso;
     }
 
     public string DescricaoTipo => Tipo == TipoCurso.Graduacao ? "Graduação" : "Pós-graduação";
