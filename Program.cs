@@ -83,21 +83,22 @@ class Program
             }
         }
     }
+
     private static void CadastrarCurso()
     {
         try
         {
+            Console.Write("Vamos iniciar o cadastro de um novo curso.\n");
             Console.Write("Código do curso: ");
             string codigo_curso = Console.ReadLine()!;
 
             // Regra de negócio: código do curso não pode se repetir
-            bool codigoJaExiste = Cursos.Any(c =>
+            bool codigoJaExiste = cursos.Any(c =>
                 c.Codigo.Equals(codigo_curso.Trim(), StringComparison.OrdinalIgnoreCase));
 
             if (codigoJaExiste)
             {
                 Console.WriteLine($"Erro: já existe um curso cadastrado com o código '{codigo_curso}'.");
-                Pausar();
                 return;
             }
 
@@ -119,7 +120,7 @@ class Program
             };
 
             Curso curso = new Curso(codigo_curso, nome_curso, tipo_curso);
-            Cursos.Add(curso);
+            cursos.Add(curso);
 
             Console.WriteLine("\nCurso cadastrado com sucesso!");
             Console.WriteLine(curso);
@@ -189,7 +190,7 @@ class Program
         }
     }
 
-     static void CadastrarAluno()
+    static void CadastrarAluno()
     {
         Console.Clear();
         Console.WriteLine("***Cadastro de Aluno***");
