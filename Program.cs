@@ -283,17 +283,55 @@ class Program
         Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com sucesso.");
         Pausar();
     }
-    static void VincularDisciplinaCurso()
-    {
-        /* Dev 3 */
+    Console.WriteLine("*** Associar disciplina a um curso ***");
+
+        if (cursos.Count == 0)
+        {
+            Console.WriteLine("Nenhum curso cadastrado.");
+            Pausar();
+            return;
+        }
+        if (disciplinas.Count == 0)
+        {
+            Console.WriteLine("Nenhuma disciplina cadastrada.");
+            Pausar();
+            return;
+        }
+
+        int idxCurso = SelecionarCurso("Selecione um curso:");
+        if (idxCurso < 0)
+        {
+            Console.WriteLine("Seleção inválida.");
+            Pausar();
+            return;
+        }
+        Curso curso = cursos[idxCurso];
+
+        int idxDisc = SelecionarDisciplina("Selecione uma disciplina:");
+        if (idxDisc < 0)
+        {
+            Console.WriteLine("Seleção inválida.");
+            Pausar();
+            return;
+        }
+
+        Disciplina disciplina = disciplinas[idxDisc];
+
+        if (curso.Disciplinas.Contains(disciplina))
+        {
+            Console.WriteLine("Essa disciplina já esta associada a este curso.");
+            return;
+        }
+
+        curso.Disciplinas.Add(disciplina);
+        Console.WriteLine($"Disciplina '{disciplina.Nome}' vinculada ao curso '{curso.Nome}'.");
+        Pausar();
     }
-    static void MatricularAluno()
-    {
-        /* Dev 4 */
-    }
-    static void LancarNota()
-    {
-        /* Dev 4 */
+    static void MatricularAluno() { 
+        /* Dev 4 */ 
+    } 
+    static void LancarNota() { 
+        /* Dev 4 */ 
     }
     static void ConsultarPessoas() { 
         /* Dev 2 */ 
