@@ -1,6 +1,4 @@
-﻿using SistemaGestaoDeFaculdade.Entities;
-
-namespace SistemaGestaoDeFaculdade;
+namespace SistemaGestaoDeFaculdade.Entities;
 
 public class Aluno : Pessoa
 {
