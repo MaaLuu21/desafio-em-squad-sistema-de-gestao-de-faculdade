@@ -1,11 +1,9 @@
-﻿using SistemaGestaoDeFaculdade.Entities;
-
-namespace SistemaGestaoDeFaculdade;
+namespace SistemaGestaoDeFaculdade.Entities;
 
 public class Aluno : Pessoa
 {
     public int NumeroMatricula { get; set; }
-
+ 
     public Aluno(string nome, string cpf, string email, int numeroMatricula)
         : base(nome, cpf, email)
     {
