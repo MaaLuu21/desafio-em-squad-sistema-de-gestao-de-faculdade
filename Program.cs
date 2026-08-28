@@ -10,7 +10,7 @@ class Program
     public static List<Professor> professores = new();
     public static List<Aluno> alunos = new();
     public static List<Disciplina> disciplinas = new();
-    public static List<Matricula> matriculas = new();
+    //public static List<Matricula> matriculas = new();
 
     static void Main(string[] args)
     {
