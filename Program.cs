@@ -337,7 +337,7 @@ class Program
             }
             if (disciplinas.Count == 0)
             {
-                Console.WriteLine("Nenhuma disciplina cadastrada. Cadastra uma nova disciplian usando o item 4 do Menu principal.");
+                Console.WriteLine("Nenhuma disciplina cadastrada. Cadastre uma nova disciplina usando o item 4 do Menu principal.");
                 return;
             }
 
