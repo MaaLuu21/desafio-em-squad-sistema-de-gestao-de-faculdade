@@ -84,112 +84,115 @@ class Program
         }
     }
 
-    // Métodos vazios para cada integrante preencher no seu branch:
-private static void CadastrarCurso()
-{
-    try
+    private static void CadastrarCurso()
     {
-        Console.Write("Código do curso: ");
-        string codigo_curso = Console.ReadLine()!;
-
-        // Regra de negócio: código do curso não pode se repetir
-        bool codigoJaExiste = cursos.Any(c =>
-            c.Codigo.Equals(codigo_curso.Trim(), StringComparison.OrdinalIgnoreCase));
-
-        if (codigoJaExiste)
+        try
         {
-            Console.WriteLine($"Erro: já existe um curso cadastrado com o código '{codigo_curso}'.");
-            return;
+            Console.Write("Vamos iniciar o cadastro de um novo curso.\n");
+            Console.Write("Código do curso: ");
+            string codigo_curso = Console.ReadLine()!;
+
+            // Regra de negócio: código do curso não pode se repetir
+            bool codigoJaExiste = cursos.Any(c =>
+                c.Codigo.Equals(codigo_curso.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (codigoJaExiste)
+            {
+                Console.WriteLine($"Erro: já existe um curso cadastrado com o código '{codigo_curso}'.");
+                return;
+            }
+
+            Console.Write("Nome do curso: ");
+            string nome_curso = Console.ReadLine()!;
+
+            Console.WriteLine("Tipo do curso:");
+            Console.WriteLine("1 - Graduação");
+            Console.WriteLine("2 - Pós-graduação");
+            Console.Write("Escolha: ");
+
+            string? opcaoTipoCurso = Console.ReadLine();
+
+            TipoCurso tipo_curso = opcaoTipoCurso switch
+            {
+                "1" => TipoCurso.Graduacao,
+                "2" => TipoCurso.PosGraduacao,
+                _ => throw new ArgumentException("Tipo de curso inválido. Escolha 1 ou 2.")
+            };
+
+            Curso curso = new Curso(codigo_curso, nome_curso, tipo_curso);
+            cursos.Add(curso);
+
+            Console.WriteLine("\nCurso cadastrado com sucesso!");
+            Console.WriteLine(curso);
         }
-
-        Console.Write("Nome do curso: ");
-        string nome_curso = Console.ReadLine()!;
-
-        Console.WriteLine("Tipo do curso:");
-        Console.WriteLine("1 - Graduação");
-        Console.WriteLine("2 - Pós-graduação");
-        Console.Write("Escolha: ");
-
-        string? opcaoTipoCurso = Console.ReadLine();
-
-        TipoCurso tipo_curso = opcaoTipoCurso switch
+        catch (Exception ex)
         {
-            "1" => TipoCurso.Graduacao,
-            "2" => TipoCurso.PosGraduacao,
-            _ => throw new ArgumentException("Tipo de curso inválido. Escolha 1 ou 2.")
-        };
-
-        Curso curso = new Curso(codigo_curso, nome_curso, tipo_curso);
-        cursos.Add(curso);
-
-        Console.WriteLine("\nCurso cadastrado com sucesso!");
-        Console.WriteLine(curso);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Erro ao cadastrar curso: {ex.Message}");
-    }
-    finally
-    {
-        Pausar();
-    }
-}
-private static void CadastrarProfessor()
-{
-    try
-    {
-        Console.Write("Nome: ");
-        string nome = Console.ReadLine()!;
-
-        Console.Write("CPF: ");
-        string cpf = Console.ReadLine()!;
-
-        // Regra de negócio: CPF não pode se repetir
-        bool cpfJaExiste = professores.Any(p =>
-            p.Cpf.Equals(cpf.Trim(), StringComparison.OrdinalIgnoreCase));
-
-        if (cpfJaExiste)
-        {
-            Console.WriteLine($"Erro: já existe um professor cadastrado com o CPF '{cpf}'.");
-            return;
+            Console.WriteLine($"Erro ao cadastrar curso: {ex.Message}");
         }
-
-        Console.Write("E-mail: ");
-        string email = Console.ReadLine()!;
-
-        Console.Write("Registro: ");
-        string registro = Console.ReadLine()!;
-
-        // Regra de negócio: registro não pode se repetir
-        bool registroJaExiste = professores.Any(p =>
-            p.Registro.Equals(registro.Trim(), StringComparison.OrdinalIgnoreCase));
-
-        if (registroJaExiste)
+        finally
         {
-            Console.WriteLine($"Erro: já existe um professor cadastrado com o registro '{registro}'.");
-            return;
+            Pausar();
         }
-
-        Console.Write("Especialidade: ");
-        string especialidade = Console.ReadLine()!;
-
-        Professor professor = new Professor(nome, cpf, email, registro, especialidade);
-        professores.Add(professor);
-
-        Console.WriteLine("\nProfessor cadastrado com sucesso!");
-        Console.WriteLine(professor);
     }
-    catch (Exception ex)
+
+    private static void CadastrarProfessor()
     {
-        Console.WriteLine($"Erro ao cadastrar professor: {ex.Message}");
+        try
+        {
+            Console.Write("Nome: ");
+            string nome = Console.ReadLine()!;
+
+            Console.Write("CPF: ");
+            string cpf = Console.ReadLine()!;
+
+            // Regra de negócio: CPF não pode se repetir
+            bool cpfJaExiste = professores.Any(p =>
+                p.Cpf.Equals(cpf.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (cpfJaExiste)
+            {
+                Console.WriteLine($"Erro: já existe um professor cadastrado com o CPF '{cpf}'.");
+                return;
+            }
+
+            Console.Write("E-mail: ");
+            string email = Console.ReadLine()!;
+
+            Console.Write("Registro: ");
+            string registro = Console.ReadLine()!;
+
+            // Regra de negócio: registro não pode se repetir
+            bool registroJaExiste = professores.Any(p =>
+                p.Registro.Equals(registro.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (registroJaExiste)
+            {
+                Console.WriteLine($"Erro: já existe um professor cadastrado com o registro '{registro}'.");
+                return;
+            }
+
+            Console.Write("Especialidade: ");
+            string especialidade = Console.ReadLine()!;
+
+            Professor professor = new Professor(nome, cpf, email, registro, especialidade);
+            professores.Add(professor);
+
+            Console.WriteLine("\nProfessor cadastrado com sucesso!");
+
+            Console.WriteLine(professor);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao cadastrar professor: {ex.Message}");
+        }
+        finally
+        {
+            Pausar();
+        }
     }
-    finally
+
+    static void CadastrarAluno()
     {
-        Pausar();
-    }
-}
-private static void CadastrarAluno()
-{
         Console.Clear();
         Console.WriteLine("***Cadastro de Aluno***");
 
@@ -205,7 +208,7 @@ private static void CadastrarAluno()
             return;
         }
 
-        Console.Write("Email aluno:");
+        Console.WriteLine("Email aluno:");
         string emailDigitado = (Console.ReadLine() ?? "").Trim();
 
         int numeroMatricula = alunos.Any() ? alunos.Max(a => a.NumeroMatricula) + 1 : 1;
@@ -215,16 +218,124 @@ private static void CadastrarAluno()
         Console.WriteLine($"\nAluno {nomeDigitado} cadastrado com sucesso! Número de matrícula: {numeroMatricula}");
         Pausar();
     }
-private static void CadastrarDisciplina()
-{
-    /* Dev 3 */
-}
-private static void VincularDisciplinaCurso()
-{
-    /* Dev 3 */
-}
-private static void MatricularAluno()
-{
+
+    static void CadastrarDisciplina()
+    {
+        Console.WriteLine("*** Cadastrar disciplina ***");
+
+        if (professores.Count == 0)
+        {
+            Console.WriteLine("Nenhum professor cadastrado.");
+            Pausar();
+            return;
+        }
+
+        Console.Write("Codigo da disciplina: ");
+        string codigo = (Console.ReadLine() ?? "").Trim();
+        if (string.IsNullOrWhiteSpace(codigo))
+        {
+            Console.WriteLine("Codigo da disciplina é um item obrigatório.");
+            Pausar();
+            return;
+        }
+
+        bool codigoExiste = disciplinas.Exists(d =>
+            d.Codigo.Equals(codigo, StringComparison.OrdinalIgnoreCase));
+        if (codigoExiste)
+        {
+            Console.WriteLine("Já existe uma disciplina com esse código.");
+            Pausar();
+            return;
+        }
+
+        string nomeDisciplina;
+        while (true)
+        {
+            Console.Write("Nome da disciplina: ");
+
+            nomeDisciplina = (Console.ReadLine() ?? "").Trim();
+
+            if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
+
+            Console.WriteLine("Nome da disciplina é um item obrigatório.");
+        }
+
+        int cargaHoraria;
+        while (true)
+        {
+            Console.Write("Carga horária (em horas): ");
+
+            if (int.TryParse(Console.ReadLine() ?? "", out cargaHoraria) && cargaHoraria > 0) break;
+
+            Console.WriteLine("Carga horária inválida.");
+        }
+
+        int idxProfessor = SelecionarProfessor("Selecione o professor responsável:");
+
+        if (idxProfessor < 0)
+        {
+            Console.WriteLine("Seleção inválida.");
+            Pausar();
+            return;
+        }
+
+        Professor responsavel = professores[idxProfessor];
+
+        disciplinas.Add(new Disciplina(codigo, nomeDisciplina, cargaHoraria, responsavel));
+
+        Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com sucesso.");
+        Pausar();
+
+    }
+    static void VincularDisciplinaCurso()
+    {
+        Console.WriteLine("*** Associar disciplina a um curso ***");
+
+        if (cursos.Count == 0)
+        {
+            Console.WriteLine("Nenhum curso cadastrado.");
+            Pausar();
+            return;
+        }
+        if (disciplinas.Count == 0)
+        {
+            Console.WriteLine("Nenhuma disciplina cadastrada.");
+            Pausar();
+            return;
+        }
+
+        int idxCurso = SelecionarCurso("Selecione um curso:");
+        if (idxCurso < 0)
+        {
+            Console.WriteLine("Seleção inválida.");
+            Pausar();
+            return;
+        }
+        Curso curso = cursos[idxCurso];
+
+        int idxDisc = SelecionarDisciplina("Selecione uma disciplina:");
+        if (idxDisc < 0)
+        {
+            Console.WriteLine("Seleção inválida.");
+            Pausar();
+            return;
+        }
+
+        Disciplina disciplina = disciplinas[idxDisc];
+
+        if (curso.Disciplinas.Contains(disciplina))
+        {
+            Console.WriteLine("Essa disciplina já esta associada a este curso.");
+            Pausar();
+            return;
+        }
+
+        curso.Disciplinas.Add(disciplina);
+        Console.WriteLine($"Disciplina '{disciplina.Nome}' vinculada ao curso '{curso.Nome}'.");
+        Pausar();
+    }
+    private static void MatricularAluno()
+    {
         /* Dev 4 */
         Console.Clear();
         Console.WriteLine("*** Matricular Aluno Em Curso ***\n");
@@ -288,32 +399,87 @@ private static void MatricularAluno()
 
         Pausar();
     }
-private static void LancarNota()
-{
-    /* Dev 4 */
-}
-private static void ConsultarPessoas()
-{
-    /* Dev 2 */
-}
-private static void ConsultarCursos()
-{
-    /* Dev 1 */
-}
-private static void ConsultarMatriculas()
-{
-}
-private static void ConsultarBoletim()
-{
-    /* Dev 5 */
-}
-private static void EnviarNotificacao()
-{
-    /* Dev 2 */
-}
-public static void Pausar()
-{
-    Console.WriteLine("\nPressione qualquer tecla para continuar...");
-    Console.ReadKey();
-}
+    static void LancarNota()
+    {
+        /* Dev 4 */
+    }
+    static void ConsultarPessoas()
+    {
+        /* Dev 2 */
+    }
+    static void ConsultarCursos()
+    {
+        /* Dev 1 */
+    }
+    static void ConsultarMatriculas()
+    {
+        /* Dev 5 */
+    }
+    static void ConsultarBoletim()
+    {
+        /* Dev 5 */
+    }
+    static void EnviarNotificacao()
+    {
+        /* Dev 2 */
+    }
+
+    public static void Pausar()
+    {
+        Console.WriteLine("\nPressione qualquer tecla para continuar...");
+        Console.ReadKey();
+    }
+
+    static int LerIndiceSelecionado(int totalItens)
+    {
+        Console.Write("Numero: ");
+        string entrada = Console.ReadLine() ?? "";
+
+        if (!int.TryParse(entrada, out int escolha))
+            return -1;
+        if (escolha < 1 || escolha > totalItens)
+            return -1;
+
+        return escolha - 1;
+    }
+
+
+    static int SelecionarProfessor(string titulo)
+    {
+        Console.WriteLine(titulo);
+
+        for (int i = 0; i < professores.Count; i++)
+        {
+            Professor p = professores[i];
+            Console.WriteLine($"{i + 1} - {p.Nome} (Registro: {p.Registro} | {p.Especialidade})");
+        }
+
+        return LerIndiceSelecionado(professores.Count);
+    }
+
+    static int SelecionarCurso(string titulo)
+    {
+        Console.WriteLine(titulo);
+
+        for (int i = 0; i < cursos.Count; i++)
+        {
+            Curso c = cursos[i];
+            Console.WriteLine($"{i + 1} - {c.Codigo} - {c.Nome} ({c.Tipo})");
+        }
+
+        return LerIndiceSelecionado(cursos.Count);
+    }
+
+    static int SelecionarDisciplina(string titulo)
+    {
+        Console.WriteLine(titulo);
+
+        for (int i = 0; i < disciplinas.Count; i++)
+        {
+            Disciplina d = disciplinas[i];
+            Console.WriteLine($"{i + 1} - {d.Codigo} - {d.Nome} (Prof: {d.Professor.Nome})");
+        }
+
+        return LerIndiceSelecionado(disciplinas.Count);
+    }
 }
