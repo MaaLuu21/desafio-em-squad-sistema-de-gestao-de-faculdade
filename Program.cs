@@ -245,8 +245,9 @@ class Program
     }
 
     static void CadastrarDisciplina()
+    {
+        try
         {
-        try { 
             Console.Clear();
             Console.WriteLine("*** Cadastro de nova disciplina ***\n");
 
@@ -399,7 +400,7 @@ class Program
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\nAluno com essa matrícula não foi encontrado.");
-            Console.ForegroundColor = ConsoleColor.Black;
+            Console.ResetColor();
             Pausar();
             return;
         }
@@ -414,7 +415,7 @@ class Program
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\nCurso não encontrado.");
-            Console.ForegroundColor = ConsoleColor.Black;
+            Console.ResetColor();
             Pausar();
             return;
         }
@@ -428,7 +429,7 @@ class Program
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"\nO aluno(a) {alunoEscolhido.Nome} já está matriculado(a) no curso '{cursoEscolhido.Nome}' e não pode ser matrículado novamente.");
-            Console.ForegroundColor = ConsoleColor.Black;
+            Console.ResetColor();
             Pausar();
             return;
         }
@@ -444,7 +445,115 @@ class Program
     }
     static void LancarNota()
     {
-        /* Dev 4 */
+        Console.Clear();
+        Console.WriteLine("***Lançamento de notas***");
+
+        Console.Write("Digite o número de mátricula do aluno: ");
+        if (!int.TryParse(Console.ReadLine(), out int numeroMatricula))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Número da matrícula inválido");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        Aluno? alunoEscolhido = alunos.FirstOrDefault(a => a.NumeroMatricula == numeroMatricula);
+
+        if (alunoEscolhido == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Aluno com essa matrícula não foi encontrado");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        Console.Write("Digite o código do curso: ");
+        string codigoCurso = (Console.ReadLine() ?? "").Trim();
+
+        Curso? cursoEscolhido = cursos.FirstOrDefault(c =>
+            c.Codigo.Equals(codigoCurso, StringComparison.OrdinalIgnoreCase));
+
+        if (cursoEscolhido == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Curso não encontrado");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        Matricula? matriculaEscolhida = matriculas.FirstOrDefault(m =>
+            m.Aluno.NumeroMatricula == alunoEscolhido.NumeroMatricula &&
+            m.Curso.Codigo.Equals(cursoEscolhido.Codigo, StringComparison.OrdinalIgnoreCase));
+
+        if (matriculaEscolhida == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("O aluno não está matrículado neste curso.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        Console.Write("Digite a disciplina: ");
+        string codigoDisciplina = (Console.ReadLine() ?? "").Trim();
+
+        Disciplina? disciplinaEscolhida = disciplinas.FirstOrDefault(d =>
+            d.Codigo.Equals(codigoDisciplina, StringComparison.OrdinalIgnoreCase));
+
+        if (disciplinaEscolhida == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Disciplina não encontrada no sistema.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        bool disciplinaPertenceCurso = cursoEscolhido.Disciplinas
+            .Any(d => d.Codigo.Equals(codigoDisciplina, StringComparison.OrdinalIgnoreCase));
+
+        if (!disciplinaPertenceCurso)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Esta disciplina não pertence ao curso informado.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        if (matriculaEscolhida.Boletim == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Não existe boletim associado a esta matrícula.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        Console.Write("Digite a nota (0 a 10): ");
+        if (!double.TryParse(Console.ReadLine(), out double nota) || nota < 0 || nota > 10)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Nota inválida! A nota deve estar entre 0 e 10.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        double notaMinimaAprovacao = cursoEscolhido.Tipo == TipoCurso.PosGraduacao ? 8.0 : 7.0;
+        string statusAprovacao = nota >= notaMinimaAprovacao ? "Aprovado" : "Reprovado";
+
+        matriculaEscolhida.Boletim.Notas.Add(new NotaDisciplina(disciplinaEscolhida, nota, statusAprovacao));
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"\nNota {nota:F1} registrada com sucesso!");
+        Console.ForegroundColor = ConsoleColor.White;
+
+        Pausar();
+
     }
     static void ConsultarPessoas()
     {
