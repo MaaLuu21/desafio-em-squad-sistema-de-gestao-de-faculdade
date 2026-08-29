@@ -255,7 +255,7 @@ class Program
 
             if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
 
-            Console.WriteLine("Nome da disciplina é um item obrigatoóio.");
+            Console.WriteLine("Nome da disciplina é um item obrigatório.");
         }
 
         int cargaHoraria;
