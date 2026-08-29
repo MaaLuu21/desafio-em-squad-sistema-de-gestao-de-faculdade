@@ -88,22 +88,24 @@ class Program
     {
         try
         {
+            Console.WriteLine("*** Cadastro de novo curso ***\n");
             Console.Write("Vamos iniciar o cadastro de um novo curso.\n");
+
+            Console.Write("Nome do curso: ");
+            string nome_curso = (Console.ReadLine() ?? "").Trim();
+
             Console.Write("Código do curso: ");
-            string codigo_curso = Console.ReadLine()!;
+            string codigo_curso = (Console.ReadLine() ?? "").Trim();
 
             // Regra de negócio: código do curso não pode se repetir
             bool codigoJaExiste = cursos.Any(c =>
-                c.Codigo.Equals(codigo_curso.Trim(), StringComparison.OrdinalIgnoreCase));
+                c.Codigo.Equals(codigo_curso, StringComparison.OrdinalIgnoreCase));
 
             if (codigoJaExiste)
             {
                 Console.WriteLine($"Erro: já existe um curso cadastrado com o código '{codigo_curso}'.");
                 return;
             }
-
-            Console.Write("Nome do curso: ");
-            string nome_curso = Console.ReadLine()!;
 
             Console.WriteLine("Tipo do curso:");
             Console.WriteLine("1 - Graduação");
@@ -139,11 +141,18 @@ class Program
     {
         try
         {
+            Console.WriteLine("*** Cadastro de novo professor ***\n");
             Console.Write("Nome: ");
             string nome = Console.ReadLine()!;
 
             Console.Write("CPF: ");
-            string cpf = Console.ReadLine()!;
+            string cpf = Pessoa.NormalizarCpf(Console.ReadLine() ?? ""); // Normaliza o CPF na entrada
+
+            if (cpf.Length != 11)
+            {
+                Console.WriteLine("O CPF deve possuir exatamente 11 números");
+                return;
+            }
 
             // Regra de negócio: CPF não pode se repetir
             bool cpfJaExiste = professores.Any(p =>
@@ -155,8 +164,7 @@ class Program
                 return;
             }
 
-            Console.Write("E-mail: ");
-            string email = Console.ReadLine()!;
+            string email = LerEmailValido("E-mail: ");
 
             Console.Write("Registro: ");
             string registro = Console.ReadLine()!;
@@ -193,150 +201,185 @@ class Program
 
     static void CadastrarAluno()
     {
-        Console.Clear();
-        Console.WriteLine("***Cadastro de Aluno***");
-
-        Console.Write("Nome aluno:");
-        string nomeDigitado = (Console.ReadLine() ?? "").Trim();
-
-        Console.Write("CPF aluno:");
-        string cpfDigitado = (Console.ReadLine() ?? "").Trim().Replace("-", "").Replace(".", "");
-        bool cpfExiste = Aluno.CpfJaCadastrado(cpfDigitado, alunos);
-        if (cpfExiste)
+        try
         {
-            Console.WriteLine("\n[ERRO]O aluno não pode ser repetido! CPF já cadastrado.");
-            return;
+            Console.Clear();
+            Console.WriteLine("*** Cadastro de Aluno ***");
+
+            Console.Write("Nome aluno:");
+            string nomeDigitado = (Console.ReadLine() ?? "").Trim();
+
+            Console.Write("CPF aluno:");
+            string cpfDigitado = Pessoa.NormalizarCpf(Console.ReadLine() ?? ""); // Normaliza o CPF na entrada
+
+            if (cpfDigitado.Length != 11)
+            {
+                Console.WriteLine("O CPF deve possuir exatamente 11 números");
+                return;
+            }
+
+            bool cpfExiste = Aluno.CpfJaCadastrado(cpfDigitado, alunos);
+            if (cpfExiste)
+            {
+                Console.WriteLine("\n[ERRO]O aluno não pode ser repetido! CPF já cadastrado.");
+                return;
+            }
+
+            string emailDigitado = LerEmailValido("E-mail: ");
+
+            int numeroMatricula = alunos.Any() ? alunos.Max(a => a.NumeroMatricula) + 1 : 1;
+
+            alunos.Add(new Aluno(nomeDigitado, cpfDigitado, emailDigitado, numeroMatricula));
+
+            Console.WriteLine($"\nAluno {nomeDigitado} cadastrado com sucesso! Número de matrícula: {numeroMatricula}");
+
         }
-
-        Console.WriteLine("Email aluno:");
-        string emailDigitado = (Console.ReadLine() ?? "").Trim();
-
-        int numeroMatricula = alunos.Any() ? alunos.Max(a => a.NumeroMatricula) + 1 : 1;
-
-        alunos.Add(new Aluno(nomeDigitado, cpfDigitado, emailDigitado, numeroMatricula));
-
-        Console.WriteLine($"\nAluno {nomeDigitado} cadastrado com sucesso! Número de matrícula: {numeroMatricula}");
-        Pausar();
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao cadastrar aluno: {ex.Message}");
+        }
+        finally
+        {
+            Pausar();
+        }
     }
 
     static void CadastrarDisciplina()
-    {
-        Console.WriteLine("*** Cadastrar disciplina ***");
-
-        if (professores.Count == 0)
         {
-            Console.WriteLine("Nenhum professor cadastrado.");
+        try { 
+            Console.Clear();
+            Console.WriteLine("*** Cadastro de nova disciplina ***\n");
+
+            if (professores.Count == 0)
+            {
+                Console.WriteLine("Nenhum professor cadastrado. Cadastre um novo professor usando o item 2 do Menu principal.");
+                return;
+            }
+
+            string codigo;
+            while (true)
+            {
+                Console.Write("Codigo da disciplina: ");
+                codigo = (Console.ReadLine() ?? "").Trim();
+                if (string.IsNullOrWhiteSpace(codigo))
+                {
+                    Console.WriteLine("Codigo da disciplina é uma informação obrigatória.");
+                    continue;
+                }
+
+                bool codigoExiste = disciplinas.Exists(d => d.Codigo.Equals(codigo, StringComparison.OrdinalIgnoreCase));
+                if (codigoExiste)
+                {
+                    Console.WriteLine("Já existe uma disciplina com esse código.");
+                    return;
+                }
+                break;
+            }
+
+            string nomeDisciplina;
+            while (true)
+            {
+                Console.Write("Nome da disciplina: ");
+
+                nomeDisciplina = (Console.ReadLine() ?? "").Trim();
+
+                if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
+
+                Console.WriteLine("Nome da disciplina é um item obrigatório.");
+            }
+
+            int cargaHoraria;
+            while (true)
+            {
+                Console.Write("Carga horária (em horas): ");
+
+                if (int.TryParse(Console.ReadLine() ?? "", out cargaHoraria) && cargaHoraria > 0) break;
+
+                Console.WriteLine("Carga horária inválida.");
+            }
+
+            int idxProfessor = SelecionarProfessor("Selecione entre os professores abaixo o responsável pela disciplina cadastrada:");
+
+            if (idxProfessor < 0)
+            {
+                Console.WriteLine("Seleção inválida.Selecione uma das opções apresentadas.");
+                Console.WriteLine("Se o professor esperado não estiver disponivel na lista, ele deve ser cadastrado usando o item 2 do Menu principal.");
+                return;
+            }
+
+            Professor responsavel = professores[idxProfessor];
+
+            disciplinas.Add(new Disciplina(codigo, nomeDisciplina, cargaHoraria, responsavel));
+
+            Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com sucesso com professor {responsavel} e carga horária de {cargaHoraria} horas.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao cadastrar disciplina: {ex.Message}");
+        }
+        finally
+        {
             Pausar();
-            return;
         }
-
-        Console.Write("Codigo da disciplina: ");
-        string codigo = (Console.ReadLine() ?? "").Trim();
-        if (string.IsNullOrWhiteSpace(codigo))
-        {
-            Console.WriteLine("Codigo da disciplina é um item obrigatório.");
-            Pausar();
-            return;
-        }
-
-        bool codigoExiste = disciplinas.Exists(d =>
-            d.Codigo.Equals(codigo, StringComparison.OrdinalIgnoreCase));
-        if (codigoExiste)
-        {
-            Console.WriteLine("Já existe uma disciplina com esse código.");
-            Pausar();
-            return;
-        }
-
-        string nomeDisciplina;
-        while (true)
-        {
-            Console.Write("Nome da disciplina: ");
-
-            nomeDisciplina = (Console.ReadLine() ?? "").Trim();
-
-            if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
-
-            Console.WriteLine("Nome da disciplina é um item obrigatório.");
-        }
-
-        int cargaHoraria;
-        while (true)
-        {
-            Console.Write("Carga horária (em horas): ");
-
-            if (int.TryParse(Console.ReadLine() ?? "", out cargaHoraria) && cargaHoraria > 0) break;
-
-            Console.WriteLine("Carga horária inválida.");
-        }
-
-        int idxProfessor = SelecionarProfessor("Selecione o professor responsável:");
-
-        if (idxProfessor < 0)
-        {
-            Console.WriteLine("Seleção inválida.");
-            Pausar();
-            return;
-        }
-
-        Professor responsavel = professores[idxProfessor];
-
-        disciplinas.Add(new Disciplina(codigo, nomeDisciplina, cargaHoraria, responsavel));
-
-        Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com sucesso.");
-        Pausar();
-
     }
+
     static void VincularDisciplinaCurso()
     {
-        Console.WriteLine("*** Associar disciplina a um curso ***");
-
-        if (cursos.Count == 0)
+        try
         {
-            Console.WriteLine("Nenhum curso cadastrado.");
-            Pausar();
-            return;
+            Console.WriteLine("*** Associar disciplina a um curso ***\n");
+
+            if (cursos.Count == 0)
+            {
+                Console.WriteLine("Nenhum curso cadastrado. Cadastre um novo curso usando o item 1 do Menu principal.");
+                return;
+            }
+            if (disciplinas.Count == 0)
+            {
+                Console.WriteLine("Nenhuma disciplina cadastrada. Cadastra uma nova disciplian usando o item 4 do Menu principal.");
+                return;
+            }
+
+            int idxCurso = SelecionarCurso("Selecione um curso abaixo para receber a disciplina:");
+            if (idxCurso < 0)
+            {
+                Console.WriteLine("Seleção inválida. Selecione uma das opções apresentadas.");
+                Console.WriteLine("Se o curso esperado não estiver disponivel na lista, ele deve ser cadastrado usando o item 1 do Menu principal.");
+                return;
+            }
+            Curso curso = cursos[idxCurso];
+
+            int idxDisc = SelecionarDisciplina("Selecione uma disciplina a ser associada ao curso selecionada:");
+            if (idxDisc < 0)
+            {
+                Console.WriteLine("Seleção inválida. Selecione uma das opções apresentadas.");
+                Console.WriteLine("Se a disciplina esperada não estiver disponivel na lista, ela deve ser cadastrada usando o item 4 do Menu principal.");
+                return;
+            }
+
+            Disciplina disciplina = disciplinas[idxDisc];
+
+            if (curso.Disciplinas.Contains(disciplina))
+            {
+                Console.WriteLine("A disciplina já esta associada a este curso.");
+                return;
+            }
+
+            curso.Disciplinas.Add(disciplina);
+            Console.WriteLine($"Disciplina '{disciplina.Nome}' vinculada ao curso '{curso.Nome}' com sucesso!");
         }
-        if (disciplinas.Count == 0)
+        catch (Exception ex)
         {
-            Console.WriteLine("Nenhuma disciplina cadastrada.");
-            Pausar();
-            return;
+            Console.WriteLine($"Erro ao vincula disciplina ao curso: {ex.Message}");
         }
-
-        int idxCurso = SelecionarCurso("Selecione um curso:");
-        if (idxCurso < 0)
+        finally
         {
-            Console.WriteLine("Seleção inválida.");
             Pausar();
-            return;
         }
-        Curso curso = cursos[idxCurso];
-
-        int idxDisc = SelecionarDisciplina("Selecione uma disciplina:");
-        if (idxDisc < 0)
-        {
-            Console.WriteLine("Seleção inválida.");
-            Pausar();
-            return;
-        }
-
-        Disciplina disciplina = disciplinas[idxDisc];
-
-        if (curso.Disciplinas.Contains(disciplina))
-        {
-            Console.WriteLine("Essa disciplina já esta associada a este curso.");
-            Pausar();
-            return;
-        }
-
-        curso.Disciplinas.Add(disciplina);
-        Console.WriteLine($"Disciplina '{disciplina.Nome}' vinculada ao curso '{curso.Nome}'.");
-        Pausar();
     }
+
     private static void MatricularAluno()
     {
-        /* Dev 4 */
         Console.Clear();
         Console.WriteLine("*** Matricular Aluno Em Curso ***\n");
 
@@ -428,6 +471,19 @@ class Program
     {
         Console.WriteLine("\nPressione qualquer tecla para continuar...");
         Console.ReadKey();
+    }
+
+    static string LerEmailValido(string mensagem = "E-mail: ")
+    {
+        string email;
+        while (true)
+        {
+            Console.Write(mensagem);
+            email = (Console.ReadLine() ?? "").Trim();
+            if (Pessoa.EmailValido(email)) break;
+            Console.WriteLine("O formato do e-mail digitado é inválido. Exemplo: nome@dominio.com");
+        }
+        return email;
     }
 
     static int LerIndiceSelecionado(int totalItens)

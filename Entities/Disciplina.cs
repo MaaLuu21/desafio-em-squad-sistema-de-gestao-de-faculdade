@@ -2,8 +2,6 @@
 
 namespace SistemaGestaoDeFaculdade.Entities
 {
-    // Uma disciplina pode ser vinculada a um ou mais cursos (o vinculo fica no Curso).
-    // O professor responsavel deve existir ANTES da criacao (validado em CadastrarDisciplina).
     public class Disciplina
     {
         // Propriedades com "set" privado: uma vez criada, a disciplina nao muda seus dados.
@@ -16,10 +14,27 @@ namespace SistemaGestaoDeFaculdade.Entities
 
         public Disciplina(string codigo, string nome, int cargaHoraria, Professor professor)
         {
-            Codigo = codigo;
-            Nome = nome;
+            if (string.IsNullOrWhiteSpace(codigo))
+                throw new ArgumentException("Código inválido. O código da disciplina não pode ser vazio.");
+
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new ArgumentException("Nome inválido. O nome da disciplina não pode ser vazio.");
+
+            if (cargaHoraria <= 0)
+                throw new ArgumentException("Carga horaria inválida. A carga horaria deve ser um número positivo.");
+
+            if (professor == null)
+                throw new ArgumentException("Toda disciplina precisa de um professor responsavel.");
+
+            Codigo = codigo.Trim().ToUpper();
+            Nome = nome.Trim();
             CargaHoraria = cargaHoraria;
             Professor = professor;
+        }
+
+        public override string ToString()
+        {
+            return $"{Codigo} - {Nome} ({CargaHoraria}h | Prof: {Professor.Nome})";
         }
     }
 }
