@@ -10,7 +10,7 @@ class Program
     public static List<Professor> professores = new();
     public static List<Aluno> alunos = new();
     public static List<Disciplina> disciplinas = new();
-    public static List<Matricula> matriculas = new();
+    //public static List<Matricula> matriculas = new();
 
     static void Main(string[] args)
     {
@@ -242,7 +242,7 @@ class Program
             d.Codigo.Equals(codigo, StringComparison.OrdinalIgnoreCase));
         if (codigoExiste)
         {
-            Console.WriteLine("Ja existe uma disciplina com esse codigo.");
+            Console.WriteLine("Já existe uma disciplina com esse código.");
             Pausar();
             return;
         }
@@ -255,24 +255,24 @@ class Program
 
             if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
 
-            Console.WriteLine("Nome da disciplina é um item obrigatorio.");
+            Console.WriteLine("Nome da disciplina é um item obrigatório.");
         }
 
         int cargaHoraria;
         while (true)
         {
-            Console.Write("Carga horaria (em horas): ");
+            Console.Write("Carga horária (em horas): ");
 
             if (int.TryParse(Console.ReadLine() ?? "", out cargaHoraria) && cargaHoraria > 0) break; 
 
-            Console.WriteLine("Carga horaria invalida. Informe um numero inteiro maior que zero.");
+            Console.WriteLine("Carga horária inválida.");
         }
 
-        int idxProfessor = SelecionarProfessor("Selecione o professor responsavel:");
+        int idxProfessor = SelecionarProfessor("Selecione o professor responsável:");
 
         if (idxProfessor < 0)
         {
-            Console.WriteLine("Selecao de professor invalida.");
+            Console.WriteLine("Seleção inválida.");
             Pausar();
             return;
         }
@@ -283,9 +283,49 @@ class Program
         Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com sucesso.");
         Pausar();
     }
-    
-    static void VincularDisciplinaCurso() { 
-        /* Dev 3 */ 
+    Console.WriteLine("*** Associar disciplina a um curso ***");
+
+        if (cursos.Count == 0)
+        {
+            Console.WriteLine("Nenhum curso cadastrado.");
+            Pausar();
+            return;
+        }
+        if (disciplinas.Count == 0)
+        {
+            Console.WriteLine("Nenhuma disciplina cadastrada.");
+            Pausar();
+            return;
+        }
+
+        int idxCurso = SelecionarCurso("Selecione um curso:");
+        if (idxCurso < 0)
+        {
+            Console.WriteLine("Seleção inválida.");
+            Pausar();
+            return;
+        }
+        Curso curso = cursos[idxCurso];
+
+        int idxDisc = SelecionarDisciplina("Selecione uma disciplina:");
+        if (idxDisc < 0)
+        {
+            Console.WriteLine("Seleção inválida.");
+            Pausar();
+            return;
+        }
+
+        Disciplina disciplina = disciplinas[idxDisc];
+
+        if (curso.Disciplinas.Contains(disciplina))
+        {
+            Console.WriteLine("Essa disciplina já esta associada a este curso.");
+            return;
+        }
+
+        curso.Disciplinas.Add(disciplina);
+        Console.WriteLine($"Disciplina '{disciplina.Nome}' vinculada ao curso '{curso.Nome}'.");
+        Pausar();
     }
     static void MatricularAluno() { 
         /* Dev 4 */ 
@@ -339,7 +379,32 @@ class Program
             Console.WriteLine($"{i + 1} - {p.Nome} (Registro: {p.Registro} | {p.Especialidade})");
         }
 
-        // Le e valida o numero contra a quantidade de itens exibidos.
         return LerIndiceSelecionado(professores.Count);
+    }
+
+    static int SelecionarCurso(string titulo)
+    {
+        Console.WriteLine(titulo);
+
+        for (int i = 0; i < cursos.Count; i++)
+        {
+            Curso c = cursos[i];
+            Console.WriteLine($"{i + 1} - {c.Codigo} - {c.Nome} ({c.Tipo})");
+        }
+
+        return LerIndiceSelecionado(cursos.Count);
+    }
+
+    static int SelecionarDisciplina(string titulo)
+    {
+        Console.WriteLine(titulo);
+
+        for (int i = 0; i < disciplinas.Count; i++)
+        {
+            Disciplina d = disciplinas[i];
+            Console.WriteLine($"{i + 1} - {d.Codigo} - {d.Nome} (Prof: {d.Professor.Nome})");
+        }
+
+        return LerIndiceSelecionado(disciplinas.Count);
     }
 }
