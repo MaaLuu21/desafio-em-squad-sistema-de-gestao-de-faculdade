@@ -1,4 +1,4 @@
-namespace SistemaGestaoDeFaculdade.Entities;
+﻿namespace SistemaGestaoDeFaculdade.Entities;
 
 /// <summary>
 /// Entidade Professor

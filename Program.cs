@@ -1,16 +1,16 @@
-namespace SistemaGestaoDeFaculdade;
-
-using SistemaGestaoDeFaculdade.Entities;
+﻿using SistemaGestaoDeFaculdade.Entities;
 using SistemaGestaoDeFaculdade.Enums;
+
+namespace SistemaGestaoDeFaculdade;
 
 class Program
 {
-    // "Banco de Dados" em memória 
+    //"Banco de Dados" em memória
     public static List<Curso> cursos = new();
     public static List<Professor> professores = new();
     public static List<Aluno> alunos = new();
     public static List<Disciplina> disciplinas = new();
-    //public static List<Matricula> matriculas = new();
+    public static List<Matricula> matriculas = new();
 
     static void Main(string[] args)
     {
@@ -39,41 +39,41 @@ class Program
 
             switch (opcao)
             {
-                case "1": 
-                    CadastrarCurso(); 
+                case "1":
+                    CadastrarCurso();
                     break;
-                case "2": 
-                    CadastrarProfessor(); 
+                case "2":
+                    CadastrarProfessor();
                     break;
-                case "3": 
-                    CadastrarAluno(); 
+                case "3":
+                    CadastrarAluno();
                     break;
-                case "4": 
-                    CadastrarDisciplina(); 
+                case "4":
+                    CadastrarDisciplina();
                     break;
-                case "5": 
-                    VincularDisciplinaCurso(); 
+                case "5":
+                    VincularDisciplinaCurso();
                     break;
-                case "6": 
-                    MatricularAluno(); 
+                case "6":
+                    MatricularAluno();
                     break;
-                case "7": 
-                    LancarNota(); 
+                case "7":
+                    LancarNota();
                     break;
-                case "8": 
-                    ConsultarPessoas(); 
+                case "8":
+                    ConsultarPessoas();
                     break;
-                case "9": 
-                    ConsultarCursos(); 
+                case "9":
+                    ConsultarCursos();
                     break;
-                case "10": 
-                    ConsultarMatriculas(); 
+                case "10":
+                    ConsultarMatriculas();
                     break;
-                case "11": 
-                    ConsultarBoletim(); 
+                case "11":
+                    ConsultarBoletim();
                     break;
-                case "12": 
-                    EnviarNotificacao(); 
+                case "12":
+                    EnviarNotificacao();
                     break;
                 case "0": executando = false; break;
                 default:
@@ -134,7 +134,7 @@ class Program
             Pausar();
         }
     }
-    
+
     private static void CadastrarProfessor()
     {
         try
@@ -178,6 +178,7 @@ class Program
             professores.Add(professor);
 
             Console.WriteLine("\nProfessor cadastrado com sucesso!");
+
             Console.WriteLine(professor);
         }
         catch (Exception ex)
@@ -194,10 +195,10 @@ class Program
     {
         Console.Clear();
         Console.WriteLine("***Cadastro de Aluno***");
-       
+
         Console.Write("Nome aluno:");
         string nomeDigitado = (Console.ReadLine() ?? "").Trim();
-       
+
         Console.Write("CPF aluno:");
         string cpfDigitado = (Console.ReadLine() ?? "").Trim().Replace("-", "").Replace(".", "");
         bool cpfExiste = Aluno.CpfJaCadastrado(cpfDigitado, alunos);
@@ -207,7 +208,7 @@ class Program
             return;
         }
 
-         Console.WriteLine("Email aluno:");
+        Console.WriteLine("Email aluno:");
         string emailDigitado = (Console.ReadLine() ?? "").Trim();
 
         int numeroMatricula = alunos.Any() ? alunos.Max(a => a.NumeroMatricula) + 1 : 1;
@@ -224,7 +225,7 @@ class Program
 
         if (professores.Count == 0)
         {
-            Console.WriteLine("Nenhum professor cadastrado. Cadastre um professor antes.");
+            Console.WriteLine("Nenhum professor cadastrado.");
             Pausar();
             return;
         }
@@ -233,7 +234,7 @@ class Program
         string codigo = (Console.ReadLine() ?? "").Trim();
         if (string.IsNullOrWhiteSpace(codigo))
         {
-            Console.WriteLine("Codigo da disciplina é um item obrigatorio.");
+            Console.WriteLine("Codigo da disciplina é um item obrigatório.");
             Pausar();
             return;
         }
@@ -251,6 +252,7 @@ class Program
         while (true)
         {
             Console.Write("Nome da disciplina: ");
+
             nomeDisciplina = (Console.ReadLine() ?? "").Trim();
 
             if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
@@ -263,7 +265,7 @@ class Program
         {
             Console.Write("Carga horária (em horas): ");
 
-            if (int.TryParse(Console.ReadLine() ?? "", out cargaHoraria) && cargaHoraria > 0) break; 
+            if (int.TryParse(Console.ReadLine() ?? "", out cargaHoraria) && cargaHoraria > 0) break;
 
             Console.WriteLine("Carga horária inválida.");
         }
@@ -280,10 +282,14 @@ class Program
         Professor responsavel = professores[idxProfessor];
 
         disciplinas.Add(new Disciplina(codigo, nomeDisciplina, cargaHoraria, responsavel));
+
         Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com sucesso.");
         Pausar();
+
     }
-    Console.WriteLine("*** Associar disciplina a um curso ***");
+    static void VincularDisciplinaCurso()
+    {
+        Console.WriteLine("*** Associar disciplina a um curso ***");
 
         if (cursos.Count == 0)
         {
@@ -320,6 +326,7 @@ class Program
         if (curso.Disciplinas.Contains(disciplina))
         {
             Console.WriteLine("Essa disciplina já esta associada a este curso.");
+            Pausar();
             return;
         }
 
@@ -327,26 +334,94 @@ class Program
         Console.WriteLine($"Disciplina '{disciplina.Nome}' vinculada ao curso '{curso.Nome}'.");
         Pausar();
     }
-    static void MatricularAluno() { 
-        /* Dev 4 */ 
-    } 
-    static void LancarNota() { 
-        /* Dev 4 */ 
+    private static void MatricularAluno()
+    {
+        /* Dev 4 */
+        Console.Clear();
+        Console.WriteLine("*** Matricular Aluno Em Curso ***\n");
+
+        Console.Write("Digite o número de matrícula do aluno: ");
+        if (!int.TryParse(Console.ReadLine(), out int numMatricula))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nNúmero de matrícula inválido.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        Aluno? alunoEscolhido = alunos.FirstOrDefault(a => a.NumeroMatricula == numMatricula);
+
+        if (alunoEscolhido == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nAluno com essa matrícula não foi encontrado.");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Pausar();
+            return;
+        }
+
+        Console.Write("Digite o código do curso: ");
+        string codigoCurso = (Console.ReadLine() ?? "").Trim();
+
+        Curso? cursoEscolhido = cursos.FirstOrDefault(c =>
+            c.Codigo.Equals(codigoCurso, StringComparison.OrdinalIgnoreCase));
+
+        if (cursoEscolhido == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nCurso não encontrado.");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Pausar();
+            return;
+        }
+
+        // Verifica se já existe uma matrícula deste aluno neste mesmo curso
+        bool jaMatriculado = matriculas.Any(m =>
+            m.Aluno.NumeroMatricula == alunoEscolhido.NumeroMatricula &&
+            m.Curso.Codigo.Equals(cursoEscolhido.Codigo, StringComparison.OrdinalIgnoreCase)); //outra forma e evitar código case sensitive
+
+        if (jaMatriculado)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\nO aluno(a) {alunoEscolhido.Nome} já está matriculado(a) no curso '{cursoEscolhido.Nome}' e não pode ser matrículado novamente.");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Pausar();
+            return;
+        }
+
+        var novaMatricula = new Matricula(alunoEscolhido, cursoEscolhido);
+
+        matriculas.Add(novaMatricula);
+
+        Console.WriteLine($"\nAluno(a) {alunoEscolhido.Nome} (Matrícula Aluno: {alunoEscolhido.NumeroMatricula}) matriculado(a) no curso '{cursoEscolhido.Nome}'!");
+        Console.WriteLine("Boletim criado e vinculado automaticamente a esta matrícula.");
+
+        Pausar();
     }
-    static void ConsultarPessoas() { 
-        /* Dev 2 */ 
+    static void LancarNota()
+    {
+        /* Dev 4 */
     }
-    static void ConsultarCursos() { 
-        /* Dev 1 */ 
+    static void ConsultarPessoas()
+    {
+        /* Dev 2 */
     }
-    static void ConsultarMatriculas() { 
-        /* Dev 5 */ 
+    static void ConsultarCursos()
+    {
+        /* Dev 1 */
     }
-    static void ConsultarBoletim() { 
-        /* Dev 5 */ 
+    static void ConsultarMatriculas()
+    {
+        /* Dev 5 */
     }
-    static void EnviarNotificacao() { 
-        /* Dev 2 */ 
+    static void ConsultarBoletim()
+    {
+        /* Dev 5 */
+    }
+    static void EnviarNotificacao()
+    {
+        /* Dev 2 */
     }
 
     public static void Pausar()

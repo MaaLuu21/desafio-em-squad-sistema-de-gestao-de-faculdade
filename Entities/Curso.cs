@@ -1,4 +1,4 @@
-namespace SistemaGestaoDeFaculdade.Entities;
+﻿namespace SistemaGestaoDeFaculdade.Entities;
 
 using SistemaGestaoDeFaculdade.Enums;
 
@@ -12,7 +12,7 @@ public class Curso
     public string Codigo { get; private set; }
     public string Nome { get; private set; }
     public TipoCurso Tipo { get; private set; }
-    public List<Disciplina> Disciplinas { get; private set; } = new List<Disciplina>(); 
+    public List<Disciplina> Disciplinas { get; private set; } = new List<Disciplina>();
 
     public Curso(string codigo_curso, string nome_curso, TipoCurso tipo_curso)
     {
