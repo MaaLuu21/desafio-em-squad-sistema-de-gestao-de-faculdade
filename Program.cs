@@ -207,10 +207,10 @@ class Program
             Console.Clear();
             Console.WriteLine("*** Cadastrar Aluno ***\n");
 
-            Console.Write("Nome aluno:");
+            Console.Write("Nome aluno: ");
             string nomeDigitado = (Console.ReadLine() ?? "").Trim();
 
-            Console.Write("CPF aluno:");
+            Console.Write("CPF aluno: ");
             string cpfDigitado = Pessoa.NormalizarCpf(Console.ReadLine() ?? ""); // Normaliza o CPF na entrada
 
             if (cpfDigitado.Length != 11)
@@ -605,8 +605,72 @@ class Program
 
     static void ConsultarCursos()
     {
-        /* Dev 1 */
+        try
+        {
+            Console.Clear();
+            Console.WriteLine("*** Consultar curso ***\n");
+
+            if (cursos.Count == 0)
+            {
+                Console.WriteLine("Erro: nenhum curso cadastrado. Cadastre um curso usando o item 1 do Menu principal.");
+                return;
+            }
+
+            int idxCurso = SelecionarCurso("Selecione um curso para consultar:");
+            if (idxCurso < 0)
+            {
+                Console.WriteLine("Erro: seleção inválida. Selecione uma das opções apresentadas.");
+                return;
+            }
+
+            Curso curso = cursos[idxCurso];
+
+            Console.WriteLine($"\nCódigo do Curso: {curso.Codigo}");
+            Console.WriteLine($"Nome do Curso: {curso.Nome}");
+            Console.WriteLine($"Tipo do Curso: {curso.DescricaoTipo}");
+
+            Console.WriteLine("\nDisciplina(s): ");
+            if (curso.Disciplinas.Count == 0)
+            {
+                Console.WriteLine("Nenhuma disciplina vinculada a este curso.");
+            }
+            else
+            {
+                foreach (Disciplina disciplina in curso.Disciplinas)
+                {
+                    Console.WriteLine(disciplina.Nome);
+                    Console.WriteLine($"Professor: {disciplina.Professor.Nome}");
+                }
+            }
+
+            List<Aluno> alunosMatriculados = matriculas
+                .Where(m => m.Curso.Codigo.Equals(curso.Codigo, StringComparison.OrdinalIgnoreCase))
+                .Select(m => m.Aluno)
+                .ToList();
+
+            Console.WriteLine("\nAlunos matriculados neste curso: ");
+            if (alunosMatriculados.Count == 0)
+            {
+                Console.WriteLine("Nenhum aluno matriculado neste curso.");
+            }
+            else
+            {
+                foreach (Aluno aluno in alunosMatriculados)
+                {
+                    Console.WriteLine(aluno.Nome);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao consultar curso: {ex.Message}");
+        }
+        finally
+        {
+            Pausar();
+        }
     }
+
     static void ConsultarMatriculas()
     {
         /* Dev 5 */
@@ -637,7 +701,7 @@ class Program
 
     static int LerIndiceSelecionado(int totalItens)
     {
-        Console.Write("Numero: ");
+        Console.Write("Número: ");
         string entrada = Console.ReadLine() ?? "";
 
         if (!int.TryParse(entrada, out int escolha))
@@ -691,7 +755,7 @@ class Program
     static void ReceberNotificacoes()
     {
         Console.WriteLine("*** Enviar Notificação ***");
-        Console.WriteLine("Deseja notificar um professor ou um aluno? Digite '1' para professor ou '2' para aluno:");
+        Console.WriteLine("Deseja notificar um professor ou um aluno? Digite '1' para professor ou '2' para aluno: ");
         string tipo = Console.ReadLine()!;
 
         if (tipo == "1")
