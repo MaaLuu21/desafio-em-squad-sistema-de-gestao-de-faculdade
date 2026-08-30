@@ -88,14 +88,27 @@ class Program
     {
         try
         {
+            Console.Clear();
             Console.WriteLine("*** Cadastro de novo curso ***\n");
             Console.Write("Vamos iniciar o cadastro de um novo curso.\n");
 
             Console.Write("Nome do curso: ");
             string nome_curso = (Console.ReadLine() ?? "").Trim();
 
+            if (string.IsNullOrWhiteSpace(nome_curso))
+            {
+                Console.WriteLine("Erro: O nome não pode ser vazio.");
+                return;
+            }
+
             Console.Write("Código do curso: ");
             string codigo_curso = (Console.ReadLine() ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(codigo_curso))
+            {
+                Console.WriteLine("Erro: O código do curso não pode ser vazio.");
+                return;
+            }
 
             // Regra de negócio: código do curso não pode se repetir
             bool codigoJaExiste = cursos.Any(c =>
@@ -103,7 +116,7 @@ class Program
 
             if (codigoJaExiste)
             {
-                Console.WriteLine($"Erro: já existe um curso cadastrado com o código '{codigo_curso}'.");
+                Console.WriteLine($"Erro: Já existe um curso cadastrado com o código '{codigo_curso}'.");
                 return;
             }
 
@@ -141,52 +154,72 @@ class Program
     {
         try
         {
-            Console.WriteLine("*** Cadastro de novo professor ***\n");
-            Console.Write("Nome: ");
-            string nome = Console.ReadLine()!;
+            Console.Clear();
+            Console.WriteLine("*** Cadastro de Professor ***\n");
+            Console.Write("Vamos iniciar o cadastro de um professor.\n");
+
+            Console.Write("Nome do Professor: ");
+            string nome = (Console.ReadLine() ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(nome))
+            {
+                Console.WriteLine("Erro: O nome não pode ser vazio.");
+                return;
+            }
 
             Console.Write("CPF: ");
             string cpf = Pessoa.NormalizarCpf(Console.ReadLine() ?? ""); // Normaliza o CPF na entrada
 
             if (cpf.Length != 11)
             {
-                Console.WriteLine("O CPF deve possuir exatamente 11 números");
+                Console.WriteLine("Erro: O CPF deve possuir exatamente 11 números.");
                 return;
             }
 
             // Regra de negócio: CPF não pode se repetir
             bool cpfJaExiste = professores.Any(p =>
-                p.Cpf.Equals(cpf.Trim(), StringComparison.OrdinalIgnoreCase));
+                p.Cpf.Equals(cpf, StringComparison.OrdinalIgnoreCase));
 
             if (cpfJaExiste)
             {
-                Console.WriteLine($"Erro: já existe um professor cadastrado com o CPF '{cpf}'.");
+                Console.WriteLine($"Erro: Já existe um professor cadastrado com o CPF '{cpf}'.");
                 return;
             }
 
             string email = LerEmailValido("E-mail: ");
 
             Console.Write("Registro: ");
-            string registro = Console.ReadLine()!;
+            string registro = (Console.ReadLine() ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(registro))
+            {
+                Console.WriteLine("Erro: O registro não pode ser vazio.");
+                return;
+            }
 
             // Regra de negócio: registro não pode se repetir
             bool registroJaExiste = professores.Any(p =>
-                p.Registro.Equals(registro.Trim(), StringComparison.OrdinalIgnoreCase));
+                p.Registro.Equals(registro, StringComparison.OrdinalIgnoreCase));
 
             if (registroJaExiste)
             {
-                Console.WriteLine($"Erro: já existe um professor cadastrado com o registro '{registro}'.");
+                Console.WriteLine($"Erro: Já existe um professor cadastrado com o registro '{registro}'.");
                 return;
             }
 
             Console.Write("Especialidade: ");
-            string especialidade = Console.ReadLine()!;
+            string especialidade = (Console.ReadLine() ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(especialidade))
+            {
+                Console.WriteLine("Erro: A especialidade não pode ser vazia.");
+                return;
+            }
 
             Professor professor = new Professor(nome, cpf, email, registro, especialidade);
             professores.Add(professor);
 
             Console.WriteLine("\nProfessor cadastrado com sucesso!");
-
             Console.WriteLine(professor);
         }
         catch (Exception ex)
@@ -214,14 +247,14 @@ class Program
 
             if (cpfDigitado.Length != 11)
             {
-                Console.WriteLine("O CPF deve possuir exatamente 11 números");
+                Console.WriteLine("Erro: O CPF deve possuir exatamente 11 números");
                 return;
             }
 
             bool cpfExiste = Aluno.CpfJaCadastrado(cpfDigitado, alunos);
             if (cpfExiste)
             {
-                Console.WriteLine("\n[ERRO]O aluno não pode ser repetido! CPF já cadastrado.");
+                Console.WriteLine("Erro: O aluno não pode ser repetido! CPF já cadastrado.");
                 return;
             }
 
