@@ -1,4 +1,4 @@
-﻿using SistemaGestaoDeFaculdade.Entities;
+using SistemaGestaoDeFaculdade.Entities;
 using SistemaGestaoDeFaculdade.Enums;
 
 namespace SistemaGestaoDeFaculdade;
@@ -261,7 +261,7 @@ class Program
         try
         {
             Console.Clear();
-            Console.WriteLine("*** Cadastro de Aluno ***");
+            Console.WriteLine("*** Cadastrar Aluno ***\n");
 
             Console.Write("Nome aluno: ");
             string nomeDigitado = (Console.ReadLine() ?? "").Trim();
@@ -329,6 +329,14 @@ class Program
                 Console.ResetColor();
                 return;
             }
+            string nomeDisciplina;
+            while (true)
+            {
+                Console.Write("Nome da disciplina: ");
+
+                nomeDisciplina = (Console.ReadLine() ?? "").Trim();
+
+                if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
 
             string nomeDisciplina;
             while (true)
@@ -415,6 +423,7 @@ class Program
     {
         try
         {
+            Console.Clear();
             Console.WriteLine("*** Associar disciplina a um curso ***\n");
 
             if (cursos.Count == 0)
@@ -704,6 +713,7 @@ class Program
         }
         Pausar();
     }
+
     static void ConsultarCursos()
     {
         try
@@ -899,7 +909,7 @@ class Program
 
     static int LerIndiceSelecionado(int totalItens)
     {
-        Console.Write("Numero: ");
+        Console.Write("Número: ");
         string entrada = Console.ReadLine() ?? "";
 
         if (!int.TryParse(entrada, out int escolha))
@@ -1006,7 +1016,7 @@ class Program
 
             Console.Write("Digite o número do aluno: ");
             int indice = int.TryParse(Console.ReadLine() ?? "0", out int result) ? result : 0;
-            if(indice < 0 || indice >= alunos.Count)
+            if (indice < 0 || indice >= alunos.Count)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Índice inválido.");
@@ -1030,4 +1040,6 @@ class Program
 
         Pausar();
     }
+   
+
 }

@@ -1,11 +1,14 @@
-﻿namespace SistemaGestaoDeFaculdade.Entities
+﻿using SistemaGestaoDeFaculdade.Enums;
+
+namespace SistemaGestaoDeFaculdade.Entities
 {
     public class Matricula
     {
         //coisas que criei que preciso além do obvio é a classe notadisciplina e boletim
         public Aluno Aluno { get; private set; }
         public Curso Curso { get; private set; }
-        public Boletim Boletim { get; private set; }
+        public Boletim Boletim { get;  set; }
+        
 
         public Matricula(Aluno aluno, Curso curso)
         {
@@ -31,5 +34,6 @@
                 throw new ArgumentException("Curso não encontrado");
             }
         }
+
     }
 }
