@@ -419,10 +419,6 @@ class Program
     {
         /* Dev 5 */
     }
-    static void EnviarNotificacao()
-    {
-        /* Dev 2 */
-    }
 
     public static void Pausar()
     {
@@ -494,6 +490,7 @@ class Program
             if (professores.Count == 0)
             {
                 Console.WriteLine("Nenhum professor cadastrado.");
+                Pausar();
                 return;
             }
 
@@ -507,6 +504,7 @@ class Program
             if (indice < 0 || indice >= professores.Count)
             {
                 Console.WriteLine("Índice inválido.");
+                Pausar();
                 return;
             }
             Console.Write("Digite a mensagem da notificação: ");
@@ -520,6 +518,7 @@ class Program
             if (alunos.Count == 0)
             {
                 Console.WriteLine("Nenhum aluno cadastrado.");
+                Pausar();
                 return;
             }
 
@@ -533,6 +532,7 @@ class Program
             if(indice < 0 || indice >= alunos.Count)
             {
                 Console.WriteLine("Índice inválido.");
+                Pausar();
                 return;
             }
             Console.Write("Digite a mensagem da notificação: ");
@@ -544,6 +544,7 @@ class Program
         else
         {
             Console.WriteLine("Opção inválida.");
+            Pausar();
         }
 
         Pausar();
