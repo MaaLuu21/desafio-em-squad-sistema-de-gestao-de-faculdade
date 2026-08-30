@@ -483,14 +483,14 @@ class Program
     private static void MatricularAluno()
     {
         Console.Clear();
-        Console.WriteLine("*** Matricular aluno em curso ***\n");
+        Console.WriteLine("*** Matricular Aluno Em Curso ***\n");
 
         Console.Write("Digite o número de matrícula do aluno: ");
         if (!int.TryParse(Console.ReadLine(), out int numMatricula))
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\nNúmero de matrícula inválido.");
-            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.White;
             Pausar();
             return;
         }
@@ -506,40 +506,45 @@ class Program
             return;
         }
 
-        int idxCurso = SelecionarCurso("Selecione um curso abaixo para receber a disciplina:");
-        if (idxCurso < 0)
+        Console.Write("Digite o código do curso: ");
+        string codigoCurso = (Console.ReadLine() ?? "").Trim();
+
+        Curso? cursoEscolhido = cursos.FirstOrDefault(c =>
+            c.Codigo.Equals(codigoCurso, StringComparison.OrdinalIgnoreCase));
+
+        if (cursoEscolhido == null)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Seleção inválida. Selecione uma das opções apresentadas.");
-            Console.ResetColor();
-            Console.WriteLine("Se o curso esperado não estiver disponivel na lista, ele deve ser cadastrado usando o item 1 do Menu principal.");
-            return;
-        }
-        Curso curso = cursos[idxCurso];
-
-        // Verifica se já existe uma matrícula deste aluno neste mesmo curso
-        bool jaMatriculado = matriculas.Any(m =>
-            m.Aluno.NumeroMatricula == alunoEscolhido.NumeroMatricula &&
-            m.Curso.Codigo.Equals(cursos[idxCurso].Codigo, StringComparison.OrdinalIgnoreCase)); //outra forma e evitar código case sensitive
-
-        if (jaMatriculado)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"\nO aluno(a) {alunoEscolhido.Nome} já está matriculado(a) no curso '{cursos[idxCurso].Nome}' e não pode ser matrículado novamente.");
+            Console.WriteLine("\nCurso não encontrado.");
             Console.ResetColor();
             Pausar();
             return;
         }
 
-        var novaMatricula = new Matricula(alunoEscolhido, cursos[idxCurso]);
+        // Verifica se já existe uma matrícula deste aluno neste mesmo curso
+        bool jaMatriculado = matriculas.Any(m =>
+            m.Aluno.NumeroMatricula == alunoEscolhido.NumeroMatricula &&
+            m.Curso.Codigo.Equals(cursoEscolhido.Codigo, StringComparison.OrdinalIgnoreCase)); //outra forma e evitar código case sensitive
+
+        if (jaMatriculado)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\nO aluno(a) {alunoEscolhido.Nome} já está matriculado(a) no curso '{cursoEscolhido.Nome}' e não pode ser matrículado novamente.");
+            Console.ResetColor();
+            Pausar();
+            return;
+        }
+
+        var novaMatricula = new Matricula(alunoEscolhido, cursoEscolhido);
 
         matriculas.Add(novaMatricula);
 
-        Console.WriteLine($"\nAluno(a) {alunoEscolhido.Nome} (Matrícula Aluno: {alunoEscolhido.NumeroMatricula}) matriculado(a) no curso '{cursos[idxCurso].Nome}'!");
+        Console.WriteLine($"\nAluno(a) {alunoEscolhido.Nome} (Matrícula Aluno: {alunoEscolhido.NumeroMatricula}) matriculado(a) no curso '{cursoEscolhido.Nome}'!");
         Console.WriteLine("Boletim criado e vinculado automaticamente a esta matrícula.");
 
         Pausar();
     }
+
     static void LancarNota()
     {
         Console.Clear();
