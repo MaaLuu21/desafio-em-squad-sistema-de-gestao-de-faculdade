@@ -97,7 +97,9 @@ class Program
 
             if (string.IsNullOrWhiteSpace(nome_curso))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Erro: O nome não pode ser vazio.");
+                Console.ResetColor();
                 return;
             }
 
@@ -106,7 +108,9 @@ class Program
 
             if (string.IsNullOrWhiteSpace(codigo_curso))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Erro: O código do curso não pode ser vazio.");
+                Console.ResetColor();
                 return;
             }
 
@@ -116,7 +120,9 @@ class Program
 
             if (codigoJaExiste)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Erro: Já existe um curso cadastrado com o código '{codigo_curso}'.");
+                Console.ResetColor();
                 return;
             }
 
@@ -137,7 +143,10 @@ class Program
             Curso curso = new Curso(codigo_curso, nome_curso, tipo_curso);
             cursos.Add(curso);
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nCurso cadastrado com sucesso!");
+            Console.ResetColor();
+
             Console.WriteLine(curso);
         }
         catch (Exception ex)
@@ -163,7 +172,9 @@ class Program
 
             if (string.IsNullOrWhiteSpace(nome))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Erro: O nome não pode ser vazio.");
+                Console.ResetColor();
                 return;
             }
 
@@ -172,7 +183,9 @@ class Program
 
             if (cpf.Length != 11)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Erro: O CPF deve possuir exatamente 11 números.");
+                Console.ResetColor();
                 return;
             }
 
@@ -182,7 +195,9 @@ class Program
 
             if (cpfJaExiste)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Erro: Já existe um professor cadastrado com o CPF '{cpf}'.");
+                Console.ResetColor();
                 return;
             }
 
@@ -193,7 +208,9 @@ class Program
 
             if (string.IsNullOrWhiteSpace(registro))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Erro: O registro não pode ser vazio.");
+                Console.ResetColor();
                 return;
             }
 
@@ -203,7 +220,9 @@ class Program
 
             if (registroJaExiste)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Erro: Já existe um professor cadastrado com o registro '{registro}'.");
+                Console.ResetColor();
                 return;
             }
 
@@ -212,14 +231,19 @@ class Program
 
             if (string.IsNullOrWhiteSpace(especialidade))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Erro: A especialidade não pode ser vazia.");
+                Console.ResetColor();
                 return;
             }
 
             Professor professor = new Professor(nome, cpf, email, registro, especialidade);
             professores.Add(professor);
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nProfessor cadastrado com sucesso!");
+            Console.ResetColor();
+
             Console.WriteLine(professor);
         }
         catch (Exception ex)
@@ -239,22 +263,34 @@ class Program
             Console.Clear();
             Console.WriteLine("*** Cadastro de Aluno ***");
 
-            Console.Write("Nome aluno:");
+            Console.Write("Nome aluno: ");
             string nomeDigitado = (Console.ReadLine() ?? "").Trim();
 
-            Console.Write("CPF aluno:");
+            if (string.IsNullOrWhiteSpace(nomeDigitado))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Erro: O nome do aluno não pode ser vazio.");
+                Console.ResetColor();
+                return;
+            }
+
+            Console.Write("CPF aluno: ");
             string cpfDigitado = Pessoa.NormalizarCpf(Console.ReadLine() ?? ""); // Normaliza o CPF na entrada
 
             if (cpfDigitado.Length != 11)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Erro: O CPF deve possuir exatamente 11 números");
+                Console.ResetColor();
                 return;
             }
 
             bool cpfExiste = Aluno.CpfJaCadastrado(cpfDigitado, alunos);
             if (cpfExiste)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Erro: O aluno não pode ser repetido! CPF já cadastrado.");
+                Console.ResetColor();
                 return;
             }
 
@@ -264,7 +300,9 @@ class Program
 
             alunos.Add(new Aluno(nomeDigitado, cpfDigitado, emailDigitado, numeroMatricula));
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"\nAluno {nomeDigitado} cadastrado com sucesso! Número de matrícula: {numeroMatricula}");
+            Console.ResetColor();
 
         }
         catch (Exception ex)
@@ -282,32 +320,14 @@ class Program
         try
         {
             Console.Clear();
-            Console.WriteLine("*** Cadastro de nova disciplina ***\n");
+            Console.WriteLine("*** Cadastrar nova disciplina ***\n");
 
             if (professores.Count == 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Nenhum professor cadastrado. Cadastre um novo professor usando o item 2 do Menu principal.");
+                Console.ResetColor();
                 return;
-            }
-
-            string codigo;
-            while (true)
-            {
-                Console.Write("Codigo da disciplina: ");
-                codigo = (Console.ReadLine() ?? "").Trim();
-                if (string.IsNullOrWhiteSpace(codigo))
-                {
-                    Console.WriteLine("Codigo da disciplina é uma informação obrigatória.");
-                    continue;
-                }
-
-                bool codigoExiste = disciplinas.Exists(d => d.Codigo.Equals(codigo, StringComparison.OrdinalIgnoreCase));
-                if (codigoExiste)
-                {
-                    Console.WriteLine("Já existe uma disciplina com esse código.");
-                    return;
-                }
-                break;
             }
 
             string nomeDisciplina;
@@ -319,7 +339,33 @@ class Program
 
                 if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
 
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Nome da disciplina é um item obrigatório.");
+                Console.ResetColor();
+            }
+
+            string codigo;
+            while (true)
+            {
+                Console.Write("Codigo da disciplina: ");
+                codigo = (Console.ReadLine() ?? "").Trim();
+                if (string.IsNullOrWhiteSpace(codigo))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Codigo da disciplina é uma informação obrigatória.");
+                    Console.ResetColor();
+                    continue;
+                }
+
+                bool codigoExiste = disciplinas.Exists(d => d.Codigo.Equals(codigo, StringComparison.OrdinalIgnoreCase));
+                if (codigoExiste)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Já existe uma disciplina com esse código.");
+                    Console.ResetColor();
+                    return;
+                }
+                break;
             }
 
             int cargaHoraria;
@@ -329,15 +375,19 @@ class Program
 
                 if (int.TryParse(Console.ReadLine() ?? "", out cargaHoraria) && cargaHoraria > 0) break;
 
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Carga horária inválida.");
+                Console.ResetColor();
             }
 
             int idxProfessor = SelecionarProfessor("Selecione entre os professores abaixo o responsável pela disciplina cadastrada:");
 
             if (idxProfessor < 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Seleção inválida.Selecione uma das opções apresentadas.");
                 Console.WriteLine("Se o professor esperado não estiver disponivel na lista, ele deve ser cadastrado usando o item 2 do Menu principal.");
+                Console.ResetColor();
                 return;
             }
 
@@ -345,7 +395,11 @@ class Program
 
             disciplinas.Add(new Disciplina(codigo, nomeDisciplina, cargaHoraria, responsavel));
 
-            Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com sucesso com professor {responsavel} e carga horária de {cargaHoraria} horas.");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com sucesso!");
+            Console.ResetColor();
+            Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com professor {responsavel} e carga horária de {cargaHoraria} horas.");
+
         }
         catch (Exception ex)
         {
@@ -365,19 +419,26 @@ class Program
 
             if (cursos.Count == 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Nenhum curso cadastrado. Cadastre um novo curso usando o item 1 do Menu principal.");
+                Console.ResetColor();
                 return;
             }
+
             if (disciplinas.Count == 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Nenhuma disciplina cadastrada. Cadastre uma nova disciplina usando o item 4 do Menu principal.");
+                Console.ResetColor();
                 return;
             }
 
             int idxCurso = SelecionarCurso("Selecione um curso abaixo para receber a disciplina:");
             if (idxCurso < 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Seleção inválida. Selecione uma das opções apresentadas.");
+                Console.ResetColor();
                 Console.WriteLine("Se o curso esperado não estiver disponivel na lista, ele deve ser cadastrado usando o item 1 do Menu principal.");
                 return;
             }
@@ -386,7 +447,9 @@ class Program
             int idxDisc = SelecionarDisciplina("Selecione uma disciplina a ser associada ao curso selecionada:");
             if (idxDisc < 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Seleção inválida. Selecione uma das opções apresentadas.");
+                Console.ResetColor();
                 Console.WriteLine("Se a disciplina esperada não estiver disponivel na lista, ela deve ser cadastrada usando o item 4 do Menu principal.");
                 return;
             }
@@ -395,12 +458,17 @@ class Program
 
             if (curso.Disciplinas.Contains(disciplina))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("A disciplina já esta associada a este curso.");
+                Console.ResetColor();
                 return;
             }
 
             curso.Disciplinas.Add(disciplina);
+
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Disciplina '{disciplina.Nome}' vinculada ao curso '{curso.Nome}' com sucesso!");
+            Console.ResetColor();
         }
         catch (Exception ex)
         {
@@ -415,14 +483,14 @@ class Program
     private static void MatricularAluno()
     {
         Console.Clear();
-        Console.WriteLine("*** Matricular Aluno Em Curso ***\n");
+        Console.WriteLine("*** Matricular aluno em curso ***\n");
 
         Console.Write("Digite o número de matrícula do aluno: ");
         if (!int.TryParse(Console.ReadLine(), out int numMatricula))
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\nNúmero de matrícula inválido.");
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ResetColor();
             Pausar();
             return;
         }
@@ -438,40 +506,36 @@ class Program
             return;
         }
 
-        Console.Write("Digite o código do curso: ");
-        string codigoCurso = (Console.ReadLine() ?? "").Trim();
-
-        Curso? cursoEscolhido = cursos.FirstOrDefault(c =>
-            c.Codigo.Equals(codigoCurso, StringComparison.OrdinalIgnoreCase));
-
-        if (cursoEscolhido == null)
+        int idxCurso = SelecionarCurso("Selecione um curso abaixo para receber a disciplina:");
+        if (idxCurso < 0)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("\nCurso não encontrado.");
+            Console.WriteLine("Seleção inválida. Selecione uma das opções apresentadas.");
             Console.ResetColor();
-            Pausar();
+            Console.WriteLine("Se o curso esperado não estiver disponivel na lista, ele deve ser cadastrado usando o item 1 do Menu principal.");
             return;
         }
+        Curso curso = cursos[idxCurso];
 
         // Verifica se já existe uma matrícula deste aluno neste mesmo curso
         bool jaMatriculado = matriculas.Any(m =>
             m.Aluno.NumeroMatricula == alunoEscolhido.NumeroMatricula &&
-            m.Curso.Codigo.Equals(cursoEscolhido.Codigo, StringComparison.OrdinalIgnoreCase)); //outra forma e evitar código case sensitive
+            m.Curso.Codigo.Equals(cursos[idxCurso].Codigo, StringComparison.OrdinalIgnoreCase)); //outra forma e evitar código case sensitive
 
         if (jaMatriculado)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"\nO aluno(a) {alunoEscolhido.Nome} já está matriculado(a) no curso '{cursoEscolhido.Nome}' e não pode ser matrículado novamente.");
+            Console.WriteLine($"\nO aluno(a) {alunoEscolhido.Nome} já está matriculado(a) no curso '{cursos[idxCurso].Nome}' e não pode ser matrículado novamente.");
             Console.ResetColor();
             Pausar();
             return;
         }
 
-        var novaMatricula = new Matricula(alunoEscolhido, cursoEscolhido);
+        var novaMatricula = new Matricula(alunoEscolhido, cursos[idxCurso]);
 
         matriculas.Add(novaMatricula);
 
-        Console.WriteLine($"\nAluno(a) {alunoEscolhido.Nome} (Matrícula Aluno: {alunoEscolhido.NumeroMatricula}) matriculado(a) no curso '{cursoEscolhido.Nome}'!");
+        Console.WriteLine($"\nAluno(a) {alunoEscolhido.Nome} (Matrícula Aluno: {alunoEscolhido.NumeroMatricula}) matriculado(a) no curso '{cursos[idxCurso].Nome}'!");
         Console.WriteLine("Boletim criado e vinculado automaticamente a esta matrícula.");
 
         Pausar();
@@ -479,7 +543,7 @@ class Program
     static void LancarNota()
     {
         Console.Clear();
-        Console.WriteLine("***Lançamento de notas***");
+        Console.WriteLine("*** Lançamento de notas ***\n");
 
         Console.Write("Digite o número de mátricula do aluno: ");
         if (!int.TryParse(Console.ReadLine(), out int numeroMatricula))
@@ -583,27 +647,229 @@ class Program
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"\nNota {nota:F1} registrada com sucesso!");
-        Console.ForegroundColor = ConsoleColor.White;
+        Console.ResetColor();
 
         Pausar();
 
     }
     static void ConsultarPessoas()
     {
-        /* Dev 2 */
+        Console.Clear();
+        Console.WriteLine("** Escolha Consultar Professor ou Aluno ***");
+        Console.WriteLine("1 - Professor");
+        Console.WriteLine("2 - Aluno");
+        string escolhaPessoa = Console.ReadLine()!;
+
+        {
+            if (escolhaPessoa == "1")
+            {
+                Console.WriteLine("\n--- PROFESSORES CADASTRADOS ---");
+                foreach (var professor in professores)
+                {
+                    Console.WriteLine($"Nome professor: {professor.Nome}");
+                    Console.WriteLine($"CPF professor: {professor.Cpf}");
+                    Console.WriteLine($"E-mail professor: {professor.Email}");
+                    Console.WriteLine($"Registro professor: {professor.Registro}");
+                    Console.WriteLine($"Especialidade professor: {professor.Especialidade}");
+                    Console.WriteLine("---------------------------------------------");
+                }
+            }
+            else if (escolhaPessoa == "2")
+            {
+                Console.WriteLine("\n--- ALUNOS CADASTRADOS ---");
+
+                foreach (var aluno in alunos)
+                {
+                    Console.WriteLine($"Nome aluno: {aluno.Nome}");
+                    Console.WriteLine($"CPF aluno: {aluno.Cpf}");
+                    Console.WriteLine($"E-mail aluno: {aluno.Email}");
+                    Console.WriteLine($"Número de Matrícula: {aluno.NumeroMatricula}");
+                    Console.WriteLine($"Cursos Matriculado: {string.Join(", ", matriculas.Where
+                        (m => m.Aluno.NumeroMatricula == aluno.NumeroMatricula).Select(m => m.Curso.Nome))}");
+                    Console.WriteLine("---------------------------------------------");
+                }
+
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Opção inválida.");
+                Console.ResetColor();
+            }
+        }
+        Pausar();
     }
     static void ConsultarCursos()
     {
-        /* Dev 1 */
+        try
+        {
+            Console.Clear();
+            Console.WriteLine("*** Consultar curso ***\n");
+
+            if (cursos.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Erro: nenhum curso cadastrado. Cadastre um curso usando o item 1 do Menu principal.");
+                Console.ResetColor();
+                return;
+            }
+
+            int idxCurso = SelecionarCurso("Selecione um curso para consultar:");
+            if (idxCurso < 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Erro: seleção inválida. Selecione uma das opções apresentadas.");
+                Console.ResetColor();
+                return;
+            }
+
+            Curso curso = cursos[idxCurso];
+
+            Console.WriteLine($"\nCódigo do Curso: {curso.Codigo}");
+            Console.WriteLine($"Nome do Curso: {curso.Nome}");
+            Console.WriteLine($"Tipo do Curso: {curso.DescricaoTipo}");
+
+            Console.WriteLine("\nDisciplina(s): ");
+            if (curso.Disciplinas.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Nenhuma disciplina vinculada a este curso.");
+                Console.ResetColor();
+            }
+            else
+            {
+                foreach (Disciplina disciplina in curso.Disciplinas)
+                {
+                    Console.WriteLine(disciplina.Nome);
+                    Console.WriteLine($"Professor: {disciplina.Professor.Nome}");
+                }
+            }
+
+            List<Aluno> alunosMatriculados = matriculas
+                .Where(m => m.Curso.Codigo.Equals(curso.Codigo, StringComparison.OrdinalIgnoreCase))
+                .Select(m => m.Aluno)
+                .ToList();
+
+            Console.WriteLine("\nAlunos matriculados neste curso: ");
+            if (alunosMatriculados.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Nenhum aluno matriculado neste curso.");
+                Console.ResetColor();
+            }
+            else
+            {
+                foreach (Aluno aluno in alunosMatriculados)
+                {
+                    Console.WriteLine(aluno.Nome);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao consultar curso: {ex.Message}");
+        }
+        finally
+        {
+            Pausar();
+        }
     }
+
     static void ConsultarMatriculas()
     {
-        /* Dev 5 */
+        Console.WriteLine("*** Consulta matrícula ***\n");
+
+        if (matriculas.Count == 0)
+        {
+            Console.WriteLine("Não há matrículas cadastradas no sistema.");
+            return;
+        }
+
+        foreach (var matricula in matriculas)
+        {
+            Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
+            Console.WriteLine($"Matrícula: {matricula.Aluno.NumeroMatricula}");
+            Console.WriteLine($"Curso: {matricula.Curso.Nome}");
+            Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
+            Console.WriteLine("---------------------------------------------");
+        }
+        Pausar();
     }
+
     static void ConsultarBoletim()
     {
-        /* Dev 5 */
+
+        Console.WriteLine("*** Consulta boletim ***\n");
+
+        if (alunos.Count == 0)
+        {
+            Console.WriteLine("Aluno não encontrado.");
+            return;
+        }
+
+        if (matriculas.Count == 0)
+        {
+            Console.WriteLine($"Não existem matrículas ativas.");
+            return;
+        }
+
+        Console.WriteLine("\n--- ALUNOS CADASTRADOS ---");
+
+        foreach (var i in alunos)
+        {
+
+            Console.WriteLine($"Nome: {i.Nome} / CPF: {i.Cpf} / Número de Matrícula: {i.NumeroMatricula}");
+
+        }
+        Console.Write("Digite o numero de matrícula para consultar o aluno: ");
+
+        if (!int.TryParse(Console.ReadLine(), out int numMatricula))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nNúmero de matrícula inválido.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+        Aluno? aluno = alunos.FirstOrDefault(a => a.NumeroMatricula == numMatricula);
+
+        if (aluno == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"A matricula {numMatricula} não foi encontrada");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        foreach (var matricula in matriculas)
+        {
+            if (matricula.Boletim == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Não há boletim associado a esta matrícula.");
+                Console.ForegroundColor = ConsoleColor.White;
+                Pausar();
+                return;
+            }
+            Console.WriteLine("\n========= BOLETIM =========");
+            Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
+            Console.WriteLine($"Matrícula: {matricula.Aluno.NumeroMatricula}");
+            Console.WriteLine($"Curso: {matricula.Curso.Nome}");
+            Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
+
+            foreach (var notaDisciplina in matricula.Boletim.Notas)
+            {
+                Console.WriteLine($"Disciplina: {notaDisciplina.Disciplina.Nome}"); // Supondo que Disciplina tenha uma propriedade Nome
+                Console.WriteLine($"Nota: {notaDisciplina.Valor}");
+                Console.WriteLine($"Situação: {notaDisciplina.Situacao}");
+                Console.WriteLine("---------------------------------------------");
+            }
+        }
+
+        Pausar();
     }
+
 
     public static void Pausar()
     {
@@ -619,7 +885,9 @@ class Program
             Console.Write(mensagem);
             email = (Console.ReadLine() ?? "").Trim();
             if (Pessoa.EmailValido(email)) break;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("O formato do e-mail digitado é inválido. Exemplo: nome@dominio.com");
+            Console.ResetColor();
         }
         return email;
     }
@@ -679,7 +947,7 @@ class Program
 
     static void ReceberNotificacoes()
     {
-        Console.WriteLine("*** Enviar Notificação ***");
+        Console.WriteLine("*** Enviar Notificação ***\n");
         Console.WriteLine("Deseja notificar um professor ou um aluno? Digite '1' para professor ou '2' para aluno:");
         string tipo = Console.ReadLine()!;
 
@@ -687,7 +955,9 @@ class Program
         {
             if (professores.Count == 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Nenhum professor cadastrado.");
+                Console.ResetColor();
                 Pausar();
                 return;
             }
@@ -701,7 +971,9 @@ class Program
             int indice = int.TryParse(Console.ReadLine() ?? "0", out int result) ? result : 0;
             if (indice < 0 || indice >= professores.Count)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Índice inválido.");
+                Console.ResetColor();
                 Pausar();
                 return;
             }
@@ -715,7 +987,9 @@ class Program
         {
             if (alunos.Count == 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Nenhum aluno cadastrado.");
+                Console.ResetColor();
                 Pausar();
                 return;
             }
@@ -729,7 +1003,9 @@ class Program
             int indice = int.TryParse(Console.ReadLine() ?? "0", out int result) ? result : 0;
             if(indice < 0 || indice >= alunos.Count)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Índice inválido.");
+                Console.ResetColor();
                 Pausar();
                 return;
             }
@@ -741,7 +1017,9 @@ class Program
         }
         else
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Opção inválida.");
+            Console.ResetColor();
             Pausar();
         }
 
