@@ -257,7 +257,17 @@ class Program
                 Console.WriteLine("Nenhum professor cadastrado. Cadastre um novo professor usando o item 2 do Menu principal.");
                 return;
             }
+            string nomeDisciplina;
+            while (true)
+            {
+                Console.Write("Nome da disciplina: ");
 
+                nomeDisciplina = (Console.ReadLine() ?? "").Trim();
+
+                if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
+
+                Console.WriteLine("Nome da disciplina é um item obrigatório.");
+            }
             string codigo;
             while (true)
             {
@@ -278,18 +288,7 @@ class Program
                 break;
             }
 
-            string nomeDisciplina;
-            while (true)
-            {
-                Console.Write("Nome da disciplina: ");
-
-                nomeDisciplina = (Console.ReadLine() ?? "").Trim();
-
-                if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
-
-                Console.WriteLine("Nome da disciplina é um item obrigatório.");
-            }
-
+            
             int cargaHoraria;
             while (true)
             {
@@ -673,12 +672,94 @@ class Program
 
     static void ConsultarMatriculas()
     {
-        /* Dev 5 */
+        Console.WriteLine("========= CONSULTA DE MATRÍCULAS =========");
+
+        if (matriculas.Count == 0)
+        {
+            Console.WriteLine("Não há matrículas cadastradas no sistema.");
+            return;
+        }
+
+        foreach (var matricula in matriculas)
+        {
+            Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
+            Console.WriteLine($"Matrícula: {matricula.Aluno.NumeroMatricula}");
+            Console.WriteLine($"Curso: {matricula.Curso.Nome}");
+            Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
+            Console.WriteLine("-----------------------------------------");
+        }
+        Pausar();
     }
     static void ConsultarBoletim()
     {
-        /* Dev 5 */
+        if (alunos.Count == 0)
+        {
+            Console.WriteLine("Aluno não encontrado.");
+            return;
+        }
+
+        if (matriculas.Count == 0)
+        {
+            Console.WriteLine($"Não existem matrículas ativas.");
+            return;
+        }
+        Console.WriteLine("\n--- LISTA DE ALUNOS ---");
+
+        foreach (var i in alunos)
+        {
+            
+            Console.WriteLine($"Nome: {i.Nome} / CPF: {i.Cpf} / Número de Matrícula: {i.NumeroMatricula}");
+            
+        }
+        Console.Write("Digite o numero de matrícula para consultar o aluno: ");
+
+        if (!int.TryParse(Console.ReadLine(), out int numMatricula))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nNúmero de matrícula inválido.");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+        Aluno? aluno = alunos.FirstOrDefault(a => a.NumeroMatricula == numMatricula);
+
+        if(aluno == null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"A matricula {numMatricula} não foi encontrada");
+            Console.ForegroundColor = ConsoleColor.White;
+            Pausar();
+            return;
+        }
+
+        foreach (var matricula in matriculas)
+        {
+            if (matricula.Boletim == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Não há boletim associado a esta matrícula.");
+                Console.ForegroundColor = ConsoleColor.White;
+                Pausar();
+                return;
+            }
+            Console.WriteLine("\n========= BOLETIM =========");
+            Console.WriteLine($"Aluno: {matricula.Aluno.Nome}");
+            Console.WriteLine($"Matrícula: {matricula.Aluno.NumeroMatricula}");
+            Console.WriteLine($"Curso: {matricula.Curso.Nome}");
+            Console.WriteLine($"Tipo: {matricula.Curso.Tipo}");
+
+            foreach (var notaDisciplina in matricula.Boletim.Notas)
+            {
+                Console.WriteLine($"Disciplina: {notaDisciplina.Disciplina.Nome}"); // Supondo que Disciplina tenha uma propriedade Nome
+                Console.WriteLine($"Nota: {notaDisciplina.Valor}");
+                Console.WriteLine($"Situação: {notaDisciplina.Situacao}");
+                Console.WriteLine("- - - - - - - - - - - - - - - - - - - - -");
+            }            
+        }   
+             
+        Pausar();
     }
+
 
     public static void Pausar()
     {
@@ -822,4 +903,6 @@ class Program
 
         Pausar();
     }
+   
+
 }
