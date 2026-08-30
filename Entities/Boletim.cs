@@ -11,6 +11,6 @@ namespace SistemaGestaoDeFaculdade.Entities
         {
             Notas = notas ?? new();
         }
-
+        
     }
 }
