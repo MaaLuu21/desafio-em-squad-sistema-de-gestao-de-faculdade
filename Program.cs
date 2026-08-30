@@ -73,7 +73,7 @@ class Program
                     ConsultarBoletim();
                     break;
                 case "12":
-                    EnviarNotificacao();
+                    ReceberNotificacoes();
                     break;
                 case "0": executando = false; break;
                 default:
@@ -571,10 +571,6 @@ class Program
     {
         /* Dev 5 */
     }
-    static void EnviarNotificacao()
-    {
-        /* Dev 2 */
-    }
 
     public static void Pausar()
     {
@@ -646,5 +642,76 @@ class Program
         }
 
         return LerIndiceSelecionado(disciplinas.Count);
+    }
+
+    static void ReceberNotificacoes()
+    {
+        Console.WriteLine("*** Enviar Notificação ***");
+        Console.WriteLine("Deseja notificar um professor ou um aluno? Digite '1' para professor ou '2' para aluno:");
+        string tipo = Console.ReadLine()!;
+
+        if (tipo == "1")
+        {
+            if (professores.Count == 0)
+            {
+                Console.WriteLine("Nenhum professor cadastrado.");
+                Pausar();
+                return;
+            }
+
+            for (int i = 0; i < professores.Count; i++)
+            {
+                Console.WriteLine($"[{i}] - {professores[i].Nome}");
+            }
+
+            Console.WriteLine("Digite o número do professor: ");
+            int indice = int.TryParse(Console.ReadLine() ?? "0", out int result) ? result : 0;
+            if (indice < 0 || indice >= professores.Count)
+            {
+                Console.WriteLine("Índice inválido.");
+                Pausar();
+                return;
+            }
+            Console.Write("Digite a mensagem da notificação: ");
+            string mensagem = Console.ReadLine()!;
+
+            professores[indice].ReceberNotificacoes(mensagem);
+            Console.WriteLine($"Notificação para {professores[indice].Nome}:{mensagem}");
+        }
+        else if (tipo == "2")
+        {
+            if (alunos.Count == 0)
+            {
+                Console.WriteLine("Nenhum aluno cadastrado.");
+                Pausar();
+                return;
+            }
+
+            for (int i = 0; i < alunos.Count; i++)
+            {
+                Console.WriteLine($"[{i}] - {alunos[i].Nome}");
+            }
+
+            Console.Write("Digite o número do aluno: ");
+            int indice = int.TryParse(Console.ReadLine() ?? "0", out int result) ? result : 0;
+            if(indice < 0 || indice >= alunos.Count)
+            {
+                Console.WriteLine("Índice inválido.");
+                Pausar();
+                return;
+            }
+            Console.Write("Digite a mensagem da notificação: ");
+            string mensagem = Console.ReadLine()!;
+
+            alunos[indice].ReceberNotificacoes(mensagem);
+            Console.WriteLine($"Notificação para {alunos[indice].Nome}:{mensagem}");
+        }
+        else
+        {
+            Console.WriteLine("Opção inválida.");
+            Pausar();
+        }
+
+        Pausar();
     }
 }
