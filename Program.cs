@@ -194,7 +194,7 @@ class Program
     static void CadastrarAluno()
     {
         Console.Clear();
-        Console.WriteLine("***Cadastro de Aluno***");
+        Console.WriteLine("*** Cadastrar Aluno ***\n");
 
         Console.Write("Nome aluno:");
         string nomeDigitado = (Console.ReadLine() ?? "").Trim();
@@ -405,7 +405,45 @@ class Program
     }
     static void ConsultarPessoas()
     {
-        /* Dev 2 */
+        Console.WriteLine("** Escolha Consultar Professores ou Alunos ***");
+        Console.WriteLine("1 - Professores");
+        Console.WriteLine("2 - Alunos");
+        string escolhaPessoa = Console.ReadLine()!;
+        
+        {
+            if (escolhaPessoa == "1")
+            {
+                Console.WriteLine("\n--- LISTA DE PROFESSORES ---");
+                foreach (var professor in professores)
+                {
+                    Console.WriteLine("------------------------------------------");
+                    Console.WriteLine($"Nome: {professor.Nome}");
+                    Console.WriteLine($"CPF: {professor.Cpf}");
+                    Console.WriteLine($"E-mail: {professor.Email}");
+                    Console.WriteLine($"Registro: {professor.Registro}");
+                    Console.WriteLine($"Especialidade: {professor.Especialidade}");
+                }
+            }
+            else if (escolhaPessoa == "2")
+            {
+                Console.WriteLine("\n--- LISTA DE ALUNOS ---");
+
+                foreach (var aluno in alunos)
+                {
+                    Console.WriteLine("------------------------------------------");
+                    Console.WriteLine($"Nome: {aluno.Nome}");
+                    Console.WriteLine($"CPF: {aluno.Cpf}");
+                    Console.WriteLine($"E-mail: {aluno.Email}");
+                    Console.WriteLine($"Número de Matrícula: {aluno.NumeroMatricula}");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Opção inválida.");
+            }
+        }
+        Pausar();
     }
     static void ConsultarCursos()
     {
