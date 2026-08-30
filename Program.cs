@@ -435,6 +435,8 @@ class Program
                     Console.WriteLine($"CPF: {aluno.Cpf}");
                     Console.WriteLine($"E-mail: {aluno.Email}");
                     Console.WriteLine($"Número de Matrícula: {aluno.NumeroMatricula}");
+                    Console.WriteLine($"Cursos Matriculados: {string.Join(", ", matriculas.Where
+                        (m => m.Aluno.NumeroMatricula == aluno.NumeroMatricula).Select(m => m.Curso.Nome))}");
                 }
 
             }
