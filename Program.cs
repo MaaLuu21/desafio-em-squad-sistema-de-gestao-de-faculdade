@@ -18,8 +18,7 @@ class Program
 
         while (executando)
         {
-            Console.Clear();
-            Console.WriteLine("__ _ _ _____ ___ ___ _____ ___ _____ _____ _____ _____ _____ _____ \r\n| | | | |     |   |   |  _  |   |  ___|   __|     |     |  _  |   __|\r\n| | | | |  |  |   |   |     |   |  |__|   __|  |  |  |  |  |  |   __|\r\n|_____|_|_____|___|___|__|__|___|_____|_____|_____|_____|_____|_____|\r\n                         W O M A K E R S C O D E");
+            Console.Clear()
             Console.WriteLine("========= GESTÃO DA FACULDADE =========");
             Console.WriteLine("1 - Cadastrar curso");
             Console.WriteLine("2 - Cadastrar professor");
@@ -85,9 +84,8 @@ class Program
         }
     }
 
-// Métodos vazios para cada integrante preencher no seu branch:
-private static void CadastrarCurso()
-{
+    private static void CadastrarCurso()
+    {
         try
         {
             Console.Write("Vamos iniciar o cadastro de um novo curso.\n");
@@ -136,8 +134,9 @@ private static void CadastrarCurso()
             Pausar();
         }
     }
-private static void CadastrarProfessor()
-{
+
+    private static void CadastrarProfessor()
+    {
         try
         {
             Console.Write("Nome: ");
@@ -179,6 +178,7 @@ private static void CadastrarProfessor()
             professores.Add(professor);
 
             Console.WriteLine("\nProfessor cadastrado com sucesso!");
+
             Console.WriteLine(professor);
         }
         catch (Exception ex)
@@ -190,8 +190,9 @@ private static void CadastrarProfessor()
             Pausar();
         }
     }
-private static void CadastrarAluno()
-{
+
+    static void CadastrarAluno()
+    {
         Console.Clear();
         Console.WriteLine("***Cadastro de Aluno***");
 
@@ -207,7 +208,7 @@ private static void CadastrarAluno()
             return;
         }
 
-        Console.Write("Email aluno:");
+        Console.WriteLine("Email aluno:");
         string emailDigitado = (Console.ReadLine() ?? "").Trim();
 
         int numeroMatricula = alunos.Any() ? alunos.Max(a => a.NumeroMatricula) + 1 : 1;
@@ -217,13 +218,14 @@ private static void CadastrarAluno()
         Console.WriteLine($"\nAluno {nomeDigitado} cadastrado com sucesso! Número de matrícula: {numeroMatricula}");
         Pausar();
     }
-private static void CadastrarDisciplina()
-{
+
+    static void CadastrarDisciplina()
+    {
         Console.WriteLine("*** Cadastrar disciplina ***");
 
         if (professores.Count == 0)
         {
-            Console.WriteLine("Nenhum professor cadastrado. Cadastre um professor antes.");
+            Console.WriteLine("Nenhum professor cadastrado.");
             Pausar();
             return;
         }
@@ -232,7 +234,7 @@ private static void CadastrarDisciplina()
         string codigo = (Console.ReadLine() ?? "").Trim();
         if (string.IsNullOrWhiteSpace(codigo))
         {
-            Console.WriteLine("Codigo da disciplina é um item obrigatorio.");
+            Console.WriteLine("Codigo da disciplina é um item obrigatório.");
             Pausar();
             return;
         }
@@ -250,11 +252,12 @@ private static void CadastrarDisciplina()
         while (true)
         {
             Console.Write("Nome da disciplina: ");
+
             nomeDisciplina = (Console.ReadLine() ?? "").Trim();
 
             if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
 
-            Console.WriteLine("Nome da disciplina é um item obrigatoóio."); 
+            Console.WriteLine("Nome da disciplina é um item obrigatório.");
         }
 
         int cargaHoraria;
@@ -271,7 +274,7 @@ private static void CadastrarDisciplina()
 
         if (idxProfessor < 0)
         {
-            Console.WriteLine("Selção de professor inválida.");
+            Console.WriteLine("Seleção inválida.");
             Pausar();
             return;
         }
@@ -279,11 +282,13 @@ private static void CadastrarDisciplina()
         Professor responsavel = professores[idxProfessor];
 
         disciplinas.Add(new Disciplina(codigo, nomeDisciplina, cargaHoraria, responsavel));
+
         Console.WriteLine($"Disciplina '{nomeDisciplina}' cadastrada com sucesso.");
         Pausar();
+
     }
-private static void VincularDisciplinaCurso()
-{
+    static void VincularDisciplinaCurso()
+    {
         Console.WriteLine("*** Associar disciplina a um curso ***");
 
         if (cursos.Count == 0)
@@ -321,6 +326,7 @@ private static void VincularDisciplinaCurso()
         if (curso.Disciplinas.Contains(disciplina))
         {
             Console.WriteLine("Essa disciplina já esta associada a este curso.");
+            Pausar();
             return;
         }
 
@@ -328,8 +334,9 @@ private static void VincularDisciplinaCurso()
         Console.WriteLine($"Disciplina '{disciplina.Nome}' vinculada ao curso '{curso.Nome}'.");
         Pausar();
     }
-private static void MatricularAluno()
-{
+    private static void MatricularAluno()
+    {
+       
         Console.Clear();
         Console.WriteLine("*** Matricular Aluno Em Curso ***\n");
 
@@ -395,7 +402,7 @@ private static void MatricularAluno()
 private static void LancarNota()
 {
         Console.Clear();
-        Console.WriteLine("***Lançamento de notas***");
+        Console.WriteLine("*** Lançamento de notas ***");
 
         Console.Write("Digite o número de mátricula do aluno: ");
         if (!int.TryParse(Console.ReadLine(), out int numeroMatricula))
@@ -578,4 +585,4 @@ static int SelecionarDisciplina(string titulo)
 
     return LerIndiceSelecionado(disciplinas.Count);
 }
-}
+   
