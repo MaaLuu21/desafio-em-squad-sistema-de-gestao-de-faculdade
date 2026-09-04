@@ -329,14 +329,6 @@ class Program
                 Console.ResetColor();
                 return;
             }
-            string nomeDisciplina;
-            while (true)
-            {
-                Console.Write("Nome da disciplina: ");
-
-                nomeDisciplina = (Console.ReadLine() ?? "").Trim();
-
-                if (!string.IsNullOrWhiteSpace(nomeDisciplina)) break;
 
             string nomeDisciplina;
             while (true)
